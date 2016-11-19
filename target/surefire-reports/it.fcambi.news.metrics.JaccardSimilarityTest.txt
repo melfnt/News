@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: it.fcambi.news.metrics.JaccardSimilarityTest
--------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec - in it.fcambi.news.metrics.JaccardSimilarityTest
