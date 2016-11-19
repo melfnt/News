@@ -1,0 +1,9 @@
+[2016-11-20 00:03:07] [com.zaxxer.hikari.HikariDataSource <init>] INFORMAZIONI: HikariPool-0 - is starting. 
+[2016-11-20 00:03:08] [com.zaxxer.hikari.pool.HikariPool shutdown] INFORMAZIONI: HikariPool-0 - is closing down. 
+[2016-11-20 00:07:11] [com.zaxxer.hikari.HikariDataSource <init>] INFORMAZIONI: HikariPool-0 - is starting. 
+[2016-11-20 00:07:11] [com.zaxxer.hikari.pool.HikariPool shutdown] INFORMAZIONI: HikariPool-0 - is closing down. 
+[2016-11-20 00:31:12] [com.zaxxer.hikari.HikariDataSource <init>] INFORMAZIONI: HikariPool-0 - is starting. 
+[2016-11-20 00:31:36] [org.glassfish.grizzly.http.server.NetworkListener start] INFORMAZIONI: Started listener bound to [localhost:8000] 
+[2016-11-20 00:31:36] [org.glassfish.grizzly.http.server.HttpServer start] INFORMAZIONI: [HttpServer] Started. 
+[2016-11-20 00:32:17] [com.zaxxer.hikari.HikariDataSource shutdown] AVVERTENZA: The shutdown() method has been deprecated, please use the close() method instead 
+[2016-11-20 00:32:17] [com.zaxxer.hikari.pool.HikariPool shutdown] INFORMAZIONI: HikariPool-0 - is closing down. 

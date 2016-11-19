@@ -14,7 +14,7 @@ public class PropertyConfig {
     public PropertyConfig() throws IOException {
         this.props = new Properties();
 //        FileInputStream in = new FileInputStream("classpath:config.properties");
-        InputStream in = getClass().getResourceAsStream("/config.properties");
+        InputStream in = PropertyConfig.class.getResourceAsStream("/config.properties");
         this.props.load(in);
         in.close();
     }

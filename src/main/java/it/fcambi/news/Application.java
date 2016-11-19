@@ -65,7 +65,7 @@ public class Application {
         try {
             props = new PropertyConfig();
         } catch (Exception e) {
-            System.err.println(e.getMessage());
+            System.err.println("Error while reading configuration file. "+e.getMessage());
             e.printStackTrace();
             System.exit(-1);
         }

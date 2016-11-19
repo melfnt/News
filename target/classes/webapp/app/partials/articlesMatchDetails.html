@@ -1,0 +1,46 @@
+<h3>Similarity <div class="progress">
+    <div class="progress-bar"
+         ng-class="matchingArticle.similarities[similarityKey] | toProgressColor"
+         role="progressbar" aria-valuenow="{{matchingArticle.similarities[similarityKey]*100}}"
+         aria-valuemin="0" aria-valuemax="100"
+         ng-style="{'width': matchingArticle.similarities[similarityKey]*100+'%'}">
+
+        {{ matchingArticle.similarities[similarityKey]*100 | number : 0 }}%
+    </div>
+</div></h3>
+
+<!--<div role="button" class="btn btn-primary col-xs-12 col-md-12" style="margin-bottom: 20px;" ng-click="matchArticle(currentArticle.id, matchingArticle.article.id)">Match</div>-->
+<br><br>
+<div class="col-md-6">
+    <div class="panel panel-default">
+        <div class="panel-heading">From {{currentArticle.source}}</div>
+        <!--<h1>-->
+            <!--{{currentArticle.title}}-->
+        <!--</h1>-->
+        <!--<p>-->
+            <!--{{currentArticle.description}}-->
+        <!--</p>-->
+    <!--</div>-->
+    <!--<p>-->
+        <!--{{currentArticle.body}}-->
+    <!--</p>-->
+        <h1 ng-bind-html="highlightedCurrentTitle | to_trusted">
+        </h1>
+        <p ng-bind-html="highlightedCurrentDescription | to_trusted">
+        </p>
+    </div>
+    <p ng-bind-html="highlightedCurrentBody | to_trusted">
+    </p>
+
+</div>
+<div class="col-md-6">
+    <div class="panel panel-default">
+        <div class="panel-heading">From {{matchingArticle.article.source}}</div>
+        <h1 ng-bind-html="highlightedMatchTitle | to_trusted">
+        </h1>
+        <p ng-bind-html="highlightedMatchDescription | to_trusted">
+        </p>
+    </div>
+    <p ng-bind-html="highlightedMatchBody | to_trusted">
+    </p>
+</div>

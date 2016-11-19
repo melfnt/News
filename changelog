@@ -1,0 +1,10 @@
+News ver 0.1
+  
+  * First version packaged by me
+  * Configured News so that it works on my host
+  * Added a .gitignore that ignores host-dependent configurations files and other java stuff (.jar, .class etc)
+  * Added a changelog (this file)
+  * Fixed minor bugs in tests.
+
+  
+-- Lucio Messina <luciomessina94@gmail.com> Sun, 20 Nov 2016 00:36:40 +0200

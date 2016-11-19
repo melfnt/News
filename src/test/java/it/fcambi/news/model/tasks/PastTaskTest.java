@@ -9,6 +9,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.logging.Logger;
 
+import java.text.DecimalFormatSymbols;
+
 import static org.junit.Assert.*;
 
 /**
@@ -63,10 +65,13 @@ public class PastTaskTest {
     @Test
     public void toStringTest() {
         PastTask p = PastTask.createFrom(t);
-
+		
+		DecimalFormatSymbols dfs = new DecimalFormatSymbols ();
+		char sep = dfs.getDecimalSeparator ();
+		
         String expected = String.format("{ id: 0, name: Test Task, description: Scheduled @ %1$Tc;Task created by %5$s," +
                 " creationTime: %2$Tc, startTime: %3$Tc, endTime: %4$Tc, result: FAILED, detailedResult: Exception at" +
-                " 0.0000 %% because java.lang.Exception: Simulated fail", t.getScheduleTime(), t.getCreationTime(),
+                " 0"+sep+"0000 %% because java.lang.Exception: Simulated fail", t.getScheduleTime(), t.getCreationTime(),
                 t.getStartTime(), t.getEndTime(), t.getCreator());
 
         assertEquals(expected, p.toString().substring(0, expected.length()));
