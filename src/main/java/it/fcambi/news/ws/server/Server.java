@@ -50,7 +50,7 @@ public class Server {
             throw new IllegalStateException("Cannot read keystore file.");
         }
         sslContext.setKeyStoreBytes(ks);
-        sslContext.setKeyStorePass("francesco");
+        sslContext.setKeyStorePass("newspasswd");
 
         URI BASE_URI = UriBuilder.fromUri(props.getProp("BIND_URI")).build();
 

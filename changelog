@@ -1,3 +1,10 @@
+News ver 0.2
+ 
+  * Added ManualClusteringService to perform manual clustetring
+  * Added /tagging dummy webapp.
+  
+-- Lucio Messina <luciomessina94@gmail.com> Thu, 1 Dec 2016 00:08:36 +0200
+
 News ver 0.1
   
   * First version packaged by me
