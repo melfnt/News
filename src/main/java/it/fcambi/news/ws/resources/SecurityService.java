@@ -81,7 +81,7 @@ public class SecurityService {
 
         log.info("Logged out "+s.getUser().getName()+" with session ID "+s.getId());
 
-        return Response.status(200).build();
+        return Response.ok().build();
     }
 
 

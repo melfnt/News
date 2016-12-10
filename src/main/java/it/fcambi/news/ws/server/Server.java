@@ -84,7 +84,8 @@ public class Server {
         return server;
     }
 
-    public void stop() {
+    public void stop() 
+    {
         server.shutdownNow();
     }
 

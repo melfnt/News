@@ -2,11 +2,11 @@ package it.fcambi.news.ws.resources;
 
 import it.fcambi.news.Application;
 import it.fcambi.news.Logging;
-import it.fcambi.news.model.auth.Session;
-import it.fcambi.news.model.auth.User;
 import it.fcambi.news.model.Article;
+import it.fcambi.news.model.ClusteringRevision;
+import it.fcambi.news.ws.resources.dto.RemovedArticlesDTO;
+import it.fcambi.news.ws.resources.dto.ClusterDTO;
 import it.fcambi.news.ws.resources.dto.ArticleDTO;
-import it.fcambi.news.ws.resources.dto.ManualClusteringBeginRequestDTO;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -29,30 +29,23 @@ public class ManualClusteringService
 {
 	
 	private final long _FIRST_SELECTABLE_CLUSTER = 66000;
-	private final int _NUMBER_OF_ARTICLES_TO_BE_SHOWN = 20;
+	private final int _NUMBER_OF_ARTICLES_TO_BE_SHOWN = 100;
 	private final Logger log = Logging.registerLogger("it.fcambi.news.ManualClustering");
 	private final Random random_generator = new Random ();
 	
 	@POST
-    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-	public Response authenticateUser ( ManualClusteringBeginRequestDTO begin_request ) 
+	public Response getARandomClusterToPerformTask () 
 	{
         try
         {
-			log.info("User "+begin_request.getName ()+" wants to perform a manual clustering");
+			log.info("Anonymus user wants to perform a manual clustering");
 			
-			List <ArticleDTO> articleDTOs;
+			ClusterDTO cluster = getRandomCluster ();
 			
-			do
-			{
-				articleDTOs = getRandomCluster ();
-			}
-			while ( articleDTOs.size() < 2 );
+			//System.out.println ("articleDTOs = " + articleDTOs.toString ());
 			
-			System.out.println ("articleDTOs = " + articleDTOs.toString ());
-			
-			return Response.status(200).entity(articleDTOs).build();
+			return Response.status(200).entity(cluster).build();
 		}
 		catch (Exception e)
 		{
@@ -62,21 +55,14 @@ public class ManualClusteringService
 		return null;
     }
     
-    private List <ArticleDTO> getRandomCluster ()
+    private ClusterDTO getRandomCluster ()
     {
 		EntityManager em = Application.createEntityManager();
-		//~ long max_cluster = em.createQuery("select max(id) from News", Long.class).getSingleResult().longValue();
-		//~ long selected_cluster = _FIRST_SELECTABLE_CLUSTER + Math.abs (random_generator.nextLong ()) % ( max_cluster - _FIRST_SELECTABLE_CLUSTER );
-		//~ long selected_cluster = 66843;
 		long selected_cluster = em.createQuery("select n.id from News n join n.articles k where n.id>:firstSelectableCluster group by n.id having count(*)>1 order by rand()", Long.class)
 								.setParameter("firstSelectableCluster", _FIRST_SELECTABLE_CLUSTER-1)
 								.setMaxResults( 1 )
 								.getSingleResult().longValue();
-		
-		//~ System.out.println ("max_cluster = " + max_cluster);
-		System.out.println ("selected_cluster = "+ selected_cluster);
-		
-		//~ TypedQuery<Article> select = em.createQuery("select a from Article a join a.news n where n.id=:newsId order by rand()", Article.class)
+				
 		TypedQuery<Article> select = em.createQuery("select a from News n join n.articles a where n.id=:newsId order by rand()", Article.class)
 									 .setParameter("newsId", selected_cluster)
 									 .setMaxResults( _NUMBER_OF_ARTICLES_TO_BE_SHOWN );
@@ -85,8 +71,49 @@ public class ManualClusteringService
 			.map(ArticleDTO::createFrom)
 			.collect(Collectors.toList());
 		
+		ClusterDTO cluster = new ClusterDTO ( selected_cluster, articleDTOs );
+		
 		em.close();
 			
-		return articleDTOs;
+		return cluster;
 	}
+	
+	@POST
+	@Path("/submit")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response authenticateUser( RemovedArticlesDTO param )
+    {
+		
+        if ( param.is_valid () )
+        {
+			log.info (param.toString());
+			System.out.println (param.toString());
+			
+			EntityManager em = Application.createEntityManager();
+			List <Long> removed_articles = param.getRemovedArticles ();
+			
+			String annotator_name = param.getAnnotatorName ();
+			long news_id = param.getClusterId ();
+			
+			for ( Long article_id: removed_articles )
+			{
+			
+				ClusteringRevision cr = new ClusteringRevision ();
+				
+				
+				cr.setAnnotatorName ( annotator_name );
+				cr.setArticleId ( article_id.longValue() );
+				cr.setNewsId ( news_id );
+
+				System.out.println ("adding to db line: "+cr.toString());
+				
+				em.getTransaction().begin();
+				em.persist(cr);
+				em.getTransaction().commit();
+			}
+        }
+        return Response.ok().entity("Ok.").build();
+    }
+    
 }

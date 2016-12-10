@@ -26,7 +26,6 @@ public class ArticleDTO
         o.url = a.getSourceUrl ();
         o.body = a.getBody ();
         o.sourceNewspaper = a.getSource ().toString ();
-        System.out.println ("adding article...");
         return o;
     }
 
