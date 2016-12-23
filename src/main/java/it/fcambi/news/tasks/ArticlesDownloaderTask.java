@@ -38,13 +38,16 @@ public class ArticlesDownloaderTask extends Task {
 
         //Crawl articles
         log.info("Article downloader process started.");
-        Crawler[] crawlers = new Crawler[6];
-        crawlers[0] = new LaRepubblicaCrawler();
-        crawlers[1] = new LaStampaCrawler();
-        crawlers[2] = new CorriereDellaSeraCrawler();
-        crawlers[3] = new AnsaCrawler();
-        crawlers[4] = new AdnkronosCrawler();
-        crawlers[5] = new IlGiornaleCrawler();
+        List <Crawler> crawlers = new LinkedList <Crawler> ();
+        
+        
+        //~ crawlers.add (new LaRepubblicaCrawler());
+        //~ crawlers.add (new LaStampaCrawler());
+        //~ crawlers.add (new CorriereDellaSeraCrawler());
+        //~ crawlers.add (new AnsaCrawler());
+        //~ crawlers.add (new AdnkronosCrawler());
+        //~ crawlers.add (new IlGiornaleCrawler());
+		crawlers.add ( new IlFattoQuotidianoCrawler () );
 
         List<FrontPage> frontPages = new LinkedList<>();
         for (Crawler crawler : crawlers) {
@@ -66,7 +69,7 @@ public class ArticlesDownloaderTask extends Task {
                 }
                 List<Article> articles = new LinkedList<>();
 
-                float statusArticleUnit = (95F/crawlers.length)/urls.size();
+                float statusArticleUnit = (95F/crawlers.size())/urls.size();
 
                 // Download each article previously retrieved
                 for (String url : urls) {

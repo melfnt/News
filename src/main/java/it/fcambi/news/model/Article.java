@@ -78,8 +78,7 @@ public class Article implements Cluster {
 
     @Column(columnDefinition = "TEXT")
     private String sourceUrl;
-
-
+	
     public String getTitle() {
         return title;
     }

@@ -1,3 +1,4 @@
+
 package it.fcambi.news;
 
 import it.fcambi.news.async.PastTaskTracer;
@@ -22,6 +23,8 @@ import java.nio.file.Paths;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import it.fcambi.news.crawlers.*;
 
 /**
  * Created by Francesco on 29/09/15.
@@ -257,7 +260,10 @@ public class Application {
         System.out.println("\nApplication Ready\n\t- Server @ "+props.getProp("BIND_URI")+"\n\t- GUI @ "+
                 props.getProp("BIND_URI")+"/gui/app/\n");
         System.out.println("Press CTRL+C to stop...");
-
+		
+		//~ IlFattoQuotidianoCrawler fcc = new IlFattoQuotidianoCrawler ();
+		//~ fcc.test ();
+		
         try {
             Thread.currentThread().join();
         } catch (Exception e) {

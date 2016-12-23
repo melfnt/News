@@ -1,3 +1,10 @@
+News ver 0.4
+ 
+  * Written SimpleCrawler.java so that writing other crawlers is much more simpler.
+  * Written a crawler for "Il fatto quotidiano" newspaper.
+  
+-- Lucio Messina <luciomessina94@gmail.com> Fri, 23 Dec 2016 11:01:03 +0200
+
 News ver 0.3
  
   * now webbapp for manual clustering works, it saves the result on db.
