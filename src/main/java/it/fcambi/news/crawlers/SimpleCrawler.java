@@ -176,6 +176,7 @@ public class SimpleCrawler implements Crawler
     public void test ()
 	{
 		logger = Logging.registerLogger("it.fcambi.news.crawlers.SimpleCrawler_"+newspaper);
+		System.out.println ("testing crawler for "+newspaper+"...");
 		try
 		{
 		
@@ -203,6 +204,7 @@ public class SimpleCrawler implements Crawler
 	        logger.info ("NON RIUSCITO");
 	        logger.info (e.toString());
 		}
+		System.out.println ("finished: see logs/it.fcambi.news.crawlers.SimpleCrawler_"+newspaper+" for details");
 	}
 	
 }
