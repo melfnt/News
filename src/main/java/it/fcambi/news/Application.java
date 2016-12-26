@@ -282,7 +282,7 @@ public class Application {
         //Compute difference in minutes from now to next o'clock hour
         long now = System.currentTimeMillis() / 3600000;
         long time = (now+1)*3600000;
-        Date schedule = new Date(time);
+        Date schedule = new Date(now);
 
         task.setScheduleTime(schedule);
         task.setPeriod(60*60*1000);

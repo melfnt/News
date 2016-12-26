@@ -23,7 +23,8 @@ public class Scheduler {
         t.queued();
 
         Future future;
-        if (t.isPeriodic()) {
+        if (t.isPeriodic()) 
+        {
             future = scheduledTasksExecutor.scheduleAtFixedRate(t, t.getScheduleTime().getTime() - System.currentTimeMillis(),
                     t.getPeriod(), TimeUnit.MILLISECONDS);
         } else if (t.hasScheduleTime()) {

@@ -1,4 +1,10 @@
 
+News ver 0.4.3
+ 
+  * Scheduled periodic tasks now start immediatly and then are repeated after their period.
+  
+-- Lucio Messina <luciomessina94@gmail.com> Mon, 26 Dec 2016 21:56:07 +0200
+
 News ver 0.4.2
  
   * Written a crawler for "Il Secolo XIX" newspaper.
