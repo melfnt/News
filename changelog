@@ -1,3 +1,8 @@
+News ver 0.4.3.1
+ 
+  * Fixed minor bug: if an exception occurs when persisting an article, this won't stop the whole persisting process.
+  
+-- Lucio Messina <luciomessina94@gmail.com> Mon, 26 Dec 2016 22:32:56 +0200
 
 News ver 0.4.3
  

@@ -32,7 +32,8 @@ public class ArticlesDownloaderTask extends Task {
     }
 
     @Override
-    public void executeTask() {
+    public void executeTask() 
+    {
         progress.set(0);
         EntityManager em = Application.createEntityManager();
 
@@ -105,25 +106,33 @@ public class ArticlesDownloaderTask extends Task {
 
         for (FrontPage page : frontPages) {
 
-            for (Article a : page.getArticles()) {
-                List<Article> articles = em.createQuery("select a from Article a " +
-                        "where (a.title like concat('%', ?1,'%') or a.sourceUrl=?2) and a.source=?3 order by a.created desc", Article.class)
-                        .setParameter(1, a.getTitle())
-                        .setParameter(2, a.getSourceUrl())
-                        .setParameter(3, a.getSource())
-                        .getResultList();
+            for (Article a : page.getArticles()) 
+            {
+				try
+				{
+					List<Article> articles = em.createQuery("select a from Article a " +
+							"where (a.title like concat('%', ?1,'%') or a.sourceUrl=?2) and a.source=?3 order by a.created desc", Article.class)
+							.setParameter(1, a.getTitle())
+							.setParameter(2, a.getSourceUrl())
+							.setParameter(3, a.getSource())
+							.getResultList();
 
-                if (articles.size() > 0) {
-                    Article article = articles.get(0);
-                    // Replace detached article with the attached one
-                    page.getArticles().set(page.getArticles().indexOf(a), article);
-                    log.log(Level.INFO, "Skipped (exists) " + a.getTitle());
-                } else {
-                    // If article doesn't exists on db
-                    // Persist it and attach
-                    em.persist(a);
-                    log.log(Level.INFO, "Persisted " + a.getTitle() + " from " + a.getSource().name());
-                }
+					if (articles.size() > 0) {
+						Article article = articles.get(0);
+						// Replace detached article with the attached one
+						page.getArticles().set(page.getArticles().indexOf(a), article);
+						log.log(Level.INFO, "Skipped (exists) " + a.getTitle());
+					} else {
+						// If article doesn't exists on db
+						// Persist it and attach
+						em.persist(a);
+						log.log(Level.INFO, "Persisted " + a.getTitle() + " from " + a.getSource().name());
+					}
+				}
+				catch ( Exception e )
+				{
+					log.log(Level.WARNING, "Skipped article because of an exception: "+a.getTitle()+" from "+ a.getSource().name());
+				}
             }
 
             //Persisting front page
