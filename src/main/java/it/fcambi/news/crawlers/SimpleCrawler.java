@@ -48,10 +48,15 @@ public class SimpleCrawler implements Crawler
 	{
 		for ( XPathTarget target : targets )
 		{
-			Elements el = target.select ( d );
-			if (el.size() > 0)
+			Elements found = target.select ( d );
+			StringBuilder ret = new StringBuilder ();
+			for ( Element el: found )
 			{
-				return el.get (0).text();
+				ret.append ( el.text ()+". " );
+			}
+			if ( ret.length() > 0 )
+			{
+				return ret.toString ();
 			}
 		}
 		return null;
@@ -105,6 +110,10 @@ public class SimpleCrawler implements Crawler
             int queryStringIndex = url.lastIndexOf('?');
             if (queryStringIndex > 0)
                 url = url.substring (0, queryStringIndex);
+            if ( url.startsWith (".") )
+				url = homepage_url+"/"+url.substring (1);
+            if ( url.startsWith ("/") )
+				url = homepage_url+url.substring (1);
             if (isArticleAtUrlParsable(url))
                 urls.add(url);
         }
@@ -170,7 +179,7 @@ public class SimpleCrawler implements Crawler
 	
 	private boolean isArticleAtUrlParsable ( String url )
 	{
-        return URL_PATTERN.matcher(url).matches();
+		return URL_PATTERN.matcher(url).matches();
     }
     
     public void test ()

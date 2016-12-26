@@ -1,3 +1,11 @@
+
+News ver 0.4.2
+ 
+  * Written a crawler for "Il Secolo XIX" newspaper.
+  * Fixed minor bugs in SimpleCrawler.
+  
+-- Lucio Messina <luciomessina94@gmail.com> Mon, 26 Dec 2016 21:07:44 +0200
+
 News ver 0.4.1
  
   * Written a crawler for "Il Post" newspaper.

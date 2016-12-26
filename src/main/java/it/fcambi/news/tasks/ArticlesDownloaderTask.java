@@ -41,13 +41,15 @@ public class ArticlesDownloaderTask extends Task {
         List <Crawler> crawlers = new LinkedList <Crawler> ();
         
         
-        //~ crawlers.add (new LaRepubblicaCrawler());
-        //~ crawlers.add (new LaStampaCrawler());
-        //~ crawlers.add (new CorriereDellaSeraCrawler());
-        //~ crawlers.add (new AnsaCrawler());
-        //~ crawlers.add (new AdnkronosCrawler());
-        //~ crawlers.add (new IlGiornaleCrawler());
+        crawlers.add (new LaRepubblicaCrawler());
+        crawlers.add (new LaStampaCrawler());
+        crawlers.add (new CorriereDellaSeraCrawler());
+        crawlers.add (new AnsaCrawler());
+        crawlers.add (new AdnkronosCrawler());
+        crawlers.add (new IlGiornaleCrawler());
 		crawlers.add ( new IlFattoQuotidianoCrawler () );
+		crawlers.add ( new IlSecoloXIXCrawler () );
+		crawlers.add ( new IlPostCrawler () );
 
         List<FrontPage> frontPages = new LinkedList<>();
         for (Crawler crawler : crawlers) {
