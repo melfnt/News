@@ -107,6 +107,8 @@ public class ArticlesDownloaderTask extends Task {
         for (FrontPage page : frontPages)
         {
 
+            log.log ("ALL THE "+page.getArticles().size()+" ARTICLES: "+page.getArticles().toString ());
+            
             for (Article a : page.getArticles()) 
             {
 				try
