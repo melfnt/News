@@ -35,7 +35,7 @@ public class ArticlesDownloaderTask extends Task {
     public void executeTask() 
     {
         progress.set(0);
-        EntityManager em = Application.createEntityManager();
+        EntityManager em;
 
         //Crawl articles
         log.info("Article downloader process started.");
@@ -107,10 +107,12 @@ public class ArticlesDownloaderTask extends Task {
         for (FrontPage page : frontPages)
         {
 
-            log.log (Level.INFO,"ALL THE "+page.getArticles().size()+" ARTICLES: "+page.getArticles().toString ());
+            log.log (Level.INFO,"THERE ARE "+page.getArticles().size()+" ARTICLES from "+page.getNewspaper().toString());
             
             for (Article a : page.getArticles()) 
             {
+				em = Application.createEntityManager();
+					
 				try
 				{
 					em.getTransaction().begin();
@@ -139,8 +141,11 @@ public class ArticlesDownloaderTask extends Task {
 					log.log(Level.WARNING, "Skipped article because of an exception: "+a.getTitle()+" from "+ a.getSource().name()+"\n"+e);
 					em.getTransaction().rollback();
 				}
+				em.close();
+
             }
 
+			em = Application.createEntityManager();
 			em.getTransaction().begin();
 				
             //Persisting front page
@@ -150,13 +155,12 @@ public class ArticlesDownloaderTask extends Task {
                 log.warning("Front Page from "+page.getNewspaper().toString()+" has no articles. (Skipped)");
 			
 			em.getTransaction().commit();
+			em.close ();
 			
             //Update progress
             progress.add(statusPageUnit);
         }
-
-        em.close();
-
+        
         progress.set(100);
 
         log.info("Articles download completed");
