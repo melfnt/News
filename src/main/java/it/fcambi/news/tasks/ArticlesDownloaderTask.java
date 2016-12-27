@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.Iterator;
 
 /**
  * Created by Francesco on 26/09/15.
@@ -109,8 +110,10 @@ public class ArticlesDownloaderTask extends Task {
 
             log.log (Level.INFO,"THERE ARE "+page.getArticles().size()+" ARTICLES from "+page.getNewspaper().toString());
             
-            for (Article a : page.getArticles()) 
+            Iterator<Article> it = page.getArticles().iterator();
+            while (it.hasNext())  
             {
+				Article a = it.next ();
 				em = Application.createEntityManager();
 					
 				try
@@ -140,6 +143,7 @@ public class ArticlesDownloaderTask extends Task {
 				{
 					log.log(Level.WARNING, "Skipped article because of an exception: "+a.getTitle()+" from "+ a.getSource().name()+"\n"+e);
 					em.getTransaction().rollback();
+					it.remove();
 				}
 				em.close();
 
