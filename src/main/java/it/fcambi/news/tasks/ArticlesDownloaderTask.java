@@ -102,14 +102,16 @@ public class ArticlesDownloaderTask extends Task {
 
         //Persist articles on db
         float statusPageUnit = 5F/frontPages.size();
-        em.getTransaction().begin();
+        
 
-        for (FrontPage page : frontPages) {
+        for (FrontPage page : frontPages)
+        {
 
             for (Article a : page.getArticles()) 
             {
 				try
 				{
+					em.getTransaction().begin();
 					List<Article> articles = em.createQuery("select a from Article a " +
 							"where (a.title like concat('%', ?1,'%') or a.sourceUrl=?2) and a.source=?3 order by a.created desc", Article.class)
 							.setParameter(1, a.getTitle())
@@ -128,25 +130,29 @@ public class ArticlesDownloaderTask extends Task {
 						em.persist(a);
 						log.log(Level.INFO, "Persisted " + a.getTitle() + " from " + a.getSource().name());
 					}
+					em.getTransaction().commit();
 				}
 				catch ( Exception e )
 				{
 					log.log(Level.WARNING, "Skipped article because of an exception: "+a.getTitle()+" from "+ a.getSource().name()+"\n"+e);
-					e.printStackTrace ();
+					//~ e.printStackTrace ();
 				}
             }
 
+			em.getTransaction().begin();
+				
             //Persisting front page
             if (page.getArticles().size() > 0)
                 em.persist(page);
             else
                 log.warning("Front Page from "+page.getNewspaper().toString()+" has no articles. (Skipped)");
-
+			
+			em.getTransaction().commit();
+			
             //Update progress
             progress.add(statusPageUnit);
         }
 
-        em.getTransaction().commit();
         em.close();
 
         progress.set(100);
