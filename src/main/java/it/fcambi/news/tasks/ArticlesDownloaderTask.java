@@ -107,7 +107,7 @@ public class ArticlesDownloaderTask extends Task {
         for (FrontPage page : frontPages)
         {
 
-            log.log ("ALL THE "+page.getArticles().size()+" ARTICLES: "+page.getArticles().toString ());
+            log.log (Level.INFO,"ALL THE "+page.getArticles().size()+" ARTICLES: "+page.getArticles().toString ());
             
             for (Article a : page.getArticles()) 
             {
@@ -137,7 +137,7 @@ public class ArticlesDownloaderTask extends Task {
 				catch ( Exception e )
 				{
 					log.log(Level.WARNING, "Skipped article because of an exception: "+a.getTitle()+" from "+ a.getSource().name()+"\n"+e);
-					em.getTransaction.rollback();
+					em.getTransaction().rollback();
 				}
             }
 
