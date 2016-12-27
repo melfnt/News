@@ -131,7 +131,7 @@ public class ArticlesDownloaderTask extends Task {
 				}
 				catch ( Exception e )
 				{
-					log.log(Level.WARNING, "Skipped article because of an exception: "+a.getTitle()+" from "+ a.getSource().name());
+					log.log(Level.WARNING, "Skipped article because of an exception: "+a.getTitle()+" from "+ a.getSource().name()+"\n"+e);
 				}
             }
 
