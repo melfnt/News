@@ -14,7 +14,8 @@ import javax.persistence.EntityManager;
 /**
  * Created by Francesco on 11/11/15.
  */
-public class MatchMapGeneratorConfigurationParser {
+public class MatchMapGeneratorConfigurationParser 
+{
 
     protected MatchMapGeneratorConfiguration config;
     protected Metric metric;

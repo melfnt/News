@@ -1,3 +1,9 @@
+News ver 0.4.4
+ 
+  * Aligned _FIRST_SELECTABLE_CLUSTER in manual clustering to the min news id of the test_lucio_2 clustering
+  
+-- Lucio Messina <luciomessina94@gmail.com> Wed, 18 Jan 2017 20:36:32 +0200
+
 News ver 0.4.3.1
  
   * Fixed minor bug: if an exception occurs when persisting an article, this won't stop the whole persisting process.

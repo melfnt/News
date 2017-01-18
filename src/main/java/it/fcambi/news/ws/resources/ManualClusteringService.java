@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 public class ManualClusteringService
 {
 	
-	private final long _FIRST_SELECTABLE_CLUSTER = 66000;
+	private final long _FIRST_SELECTABLE_CLUSTER = 76506;
 	private final int _NUMBER_OF_ARTICLES_TO_BE_SHOWN = 100;
 	private final Logger log = Logging.registerLogger("it.fcambi.news.ManualClustering");
 	private final Random random_generator = new Random ();
