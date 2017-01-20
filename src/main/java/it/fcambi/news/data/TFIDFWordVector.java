@@ -70,4 +70,5 @@ public class TFIDFWordVector extends FrequenciesWordVector {
     public void setFrequencies(List<Double> frequencies) {
         this.frequencies = frequencies;
     }
+    
 }

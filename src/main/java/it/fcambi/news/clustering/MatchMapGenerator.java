@@ -14,6 +14,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+//DEBUG
+import it.fcambi.news.debug.TfIdfDebugger;
+
+
 public class MatchMapGenerator {
 
     protected Map<Long, Text> keywordCache = new ConcurrentHashMap<>();
@@ -23,6 +27,9 @@ public class MatchMapGenerator {
 
     protected AtomicInteger progress;
     protected int toMatchArticlesSize;
+		
+	//DEBUG
+	private TfIdfDebugger tf_idf_debugger = new TfIdfDebugger ( "CAMBI" );
 
     public MatchMapGenerator(MatchMapGeneratorConfiguration config) {
         this.config = config;
@@ -69,11 +76,16 @@ public class MatchMapGenerator {
                 WordVector w = config.getWordVectorFactory().createNewVector();
                 w.setWordsFrom(keywordCache.get(article.getId()), keywordCache.get(match.getId()));
                 w.setValuesFrom(bodyCache.get(article.getId()));
-
+				
                 WordVector v = config.getWordVectorFactory().createNewVector();
                 v.setWords(w.getWords());
                 v.setValuesFrom(bodyCache.get(match.getId()));
 
+                //DEBUG
+				tf_idf_debugger.conditional_debug ( article, w );
+				tf_idf_debugger.conditional_debug ( match, v );
+				
+                
                 MatchingArticle a = new MatchingArticle();
                 a.setArticle(match);
 

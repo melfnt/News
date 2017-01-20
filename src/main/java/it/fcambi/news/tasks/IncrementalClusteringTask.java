@@ -12,6 +12,7 @@ import javax.persistence.NoResultException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+
 /**
  * Created by Francesco on 06/11/15.
  */
@@ -21,7 +22,7 @@ public class IncrementalClusteringTask extends Task {
     private Matcher matcher;
     private List<Article> articlesToBeClustered;
     private Clustering clustering;
-
+	
     public IncrementalClusteringTask(MatchMapGeneratorConfiguration matchMapConfiguration, Matcher matcher,
                                      List<Article> articlesToBeClustered, Clustering clustering) {
         super();
@@ -29,6 +30,7 @@ public class IncrementalClusteringTask extends Task {
         this.matcher = matcher;
         this.articlesToBeClustered = articlesToBeClustered;
         this.clustering = clustering;
+        
     }
 
     @Override
@@ -72,6 +74,7 @@ public class IncrementalClusteringTask extends Task {
         //TODO Remove
         classifiedArticles.forEach(a -> {
             assert a.getNews(clustering) != null;
+            
         });
 
         Set<News> newsToMerge = new HashSet<>();
@@ -80,7 +83,7 @@ public class IncrementalClusteringTask extends Task {
         // updating classifiedArticles each iteration
         for (int i=0; i<articlesToBeClustered.size() && !Thread.currentThread().isInterrupted(); i++) {
             Article article = articlesToBeClustered.get(i);
-
+			
             //Match map generation
             List<Article> articleToCluster = new LinkedList<>();
             articleToCluster.add(article);
