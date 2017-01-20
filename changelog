@@ -1,3 +1,10 @@
+News ver 0.5
+ 
+  * Started implementing global tfidf so that application can save time and space while clustering.
+  * Implemented TfIdfDebugger that allows debug tf-idf values for some articles.
+  
+-- Lucio Messina <luciomessina94@gmail.com> Wed, 20 Jan 2017 15:23:32 +0200
+
 News ver 0.4.4
  
   * Aligned _FIRST_SELECTABLE_CLUSTER in manual clustering to the min news id of the test_lucio_2 clustering
