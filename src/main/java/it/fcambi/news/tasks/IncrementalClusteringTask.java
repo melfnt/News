@@ -59,7 +59,7 @@ public class IncrementalClusteringTask extends Task {
         //~ //Configure match map generator
         //~ MatchMapGenerator matchMapGenerator = new MatchMapGenerator(matchMapConfiguration);
         //Configure match map generator so thati it uses global tf idf vectors
-        MatchMapGenerator matchMapGenerator = new MatchMapGeneratorWithGlobalTfIdf (matchMapConfiguration);
+        MatchMapGeneratorWithGlobalTfIdf matchMapGenerator = new MatchMapGeneratorWithGlobalTfIdf (matchMapConfiguration);
 
         //Prepare set with all articles from existing clusters
         String select = "select a from Article a where key(a.news)=:clusteringName";
@@ -82,6 +82,11 @@ public class IncrementalClusteringTask extends Task {
 
         Set<News> newsToMerge = new HashSet<>();
 
+		// FOR GLOBALTFIDF ONLY
+        matchMapGenerator.process_articles_and_add_to_cache ( articlesToBeClustered );
+        matchMapGenerator.process_articles_and_add_to_cache ( classifiedArticles );
+        
+        
         //Find a fitting cluster for each article one by one
         // updating classifiedArticles each iteration
         for (int i=0; i<articlesToBeClustered.size() && !Thread.currentThread().isInterrupted(); i++) {

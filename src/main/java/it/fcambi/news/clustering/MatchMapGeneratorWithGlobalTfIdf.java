@@ -36,19 +36,11 @@ public class MatchMapGeneratorWithGlobalTfIdf extends MatchMapGenerator
 		this.dictionary = (  ( TFIDFWordVectorFactory ) config.getWordVectorFactory()  ).get_dictionary ();
 		
     }
-
-    /**
-     * @param articlesToMatch          Set of articles to match
-     * @param knownArticles           Set of previously clustered articles
-     * @return Map that bind each article with a list of possible matchings
-     */
-    public Map<Article, List<MatchingArticle>> generateMap(Collection<Article> articlesToMatch, Collection<Article> knownArticles) {
-        progress.set(0);
-        toMatchArticlesSize = articlesToMatch.size();
-
-        /* Preprocess articles */
-        Stream.concat(articlesToMatch.stream(), knownArticles.stream()).parallel()
-                .filter(article -> !(bodyCache.containsKey(article.getId()) && keywordCache.containsKey(article.getId())))
+    
+    public void process_articles_and_add_to_cache ( Collection<Article> articles )
+    {
+		articles.stream().parallel()
+                .filter( article -> !( vector_cache.containsKey(article.getId()) ) )
                 .distinct()
                 .forEach(article -> {
             Text body = getTextAndApplyFilters(article.getBody());
@@ -63,6 +55,16 @@ public class MatchMapGeneratorWithGlobalTfIdf extends MatchMapGenerator
 			tf_idf_debugger.conditional_debug ( article, w );
     
         });
+	}
+
+    /**
+     * @param articlesToMatch          Set of articles to match
+     * @param knownArticles           Set of previously clustered articles
+     * @return Map that bind each article with a list of possible matchings
+     */
+    public Map<Article, List<MatchingArticle>> generateMap(Collection<Article> articlesToMatch, Collection<Article> knownArticles) {
+        progress.set(0);
+        toMatchArticlesSize = articlesToMatch.size();
 
         // Source Article -> Similarities with all articles
         Map<Article, List<MatchingArticle>> matchMap;
