@@ -1,3 +1,9 @@
+News ver 0.6.1.1
+ 
+  * reset configuration to non-global tfidf vectors to evaluate time performance against global ones.
+  
+-- Lucio Messina <luciomessina94@gmail.com> Sun, 22 Jan 2017 19:07:47 +0200
+
 News ver 0.6.1
  
   * bugfix in cache using.
