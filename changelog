@@ -1,3 +1,9 @@
+News ver 0.6
+ 
+  * Implemented MatchMapGeneratorWithGlobalTfIdf, that uses global tf idf vectors.
+  
+-- Lucio Messina <luciomessina94@gmail.com> Sun, 22 Jan 2017 11:06:23 +0200
+
 News ver 0.5
  
   * Started implementing global tfidf so that application can save time and space while clustering.

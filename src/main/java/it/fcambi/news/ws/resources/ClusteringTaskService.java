@@ -147,7 +147,7 @@ public class ClusteringTaskService extends TaskService<IncrementalClusteringTask
 
         IncrementalClusteringTask task = new IncrementalClusteringTask(
                 parser.getConfig(), matcher, articlesToBeClustered, clustering);
-
+       
         int id = super.executeTask(task);
 
         em.close();

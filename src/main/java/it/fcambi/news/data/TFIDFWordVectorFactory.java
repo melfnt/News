@@ -13,6 +13,11 @@ public class TFIDFWordVectorFactory implements WordVectorFactory {
         dictionary.enableParallelism();
         this.dictionary = dictionary;
     }
+    
+    public TFDictionary get_dictionary ()
+    {
+		return dictionary;
+	}
 
     @Override
     public WordVector createNewVector() {

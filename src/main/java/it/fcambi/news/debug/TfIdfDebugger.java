@@ -53,7 +53,7 @@ public class TfIdfDebugger
 			if (   (  ( this._A * id + this._B ) % _DEBUG_ONE_ARTICLE_EVERY  ) == 3  &&  ! already_debugged.contains (id)   )
 			{
 				log.info("conditional debugging on article with id="+id+". Its permutation is "+(  ( this._A * id + this._B ) % _DEBUG_ONE_ARTICLE_EVERY  ) );
-				FileWriter fw = new FileWriter( _DEBUG_DIRECTORY + "article_" + id + filename_suffix );
+				FileWriter fw = new FileWriter( _DEBUG_DIRECTORY + "article_" + id + "_" + filename_suffix );
 				List <Double> values = vector.getValues ();
 				List <String> words = vector.getWords ();
 				for ( int i=0; i<values.size(); ++i )

@@ -1,13 +1,18 @@
 package it.fcambi.news.clustering;
 
+import it.fcambi.news.model.TFDictionary;
 import it.fcambi.news.Pair;
 import it.fcambi.news.data.Text;
-import it.fcambi.news.data.WordVector;
+import it.fcambi.news.data.GlobalTFIDFWordVector;
+import it.fcambi.news.data.TFIDFWordVectorFactory;
 import it.fcambi.news.model.Article;
 import it.fcambi.news.model.MatchingArticle;
 
 import java.util.Collection;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -17,30 +22,19 @@ import java.util.stream.Stream;
 //DEBUG
 import it.fcambi.news.debug.TfIdfDebugger;
 
+public class MatchMapGeneratorWithGlobalTfIdf extends MatchMapGenerator
+{
 
-public class MatchMapGenerator {
-
-    protected Map<Long, Text> keywordCache = new ConcurrentHashMap<>();
-    protected Map<Long, Text> bodyCache = new ConcurrentHashMap<>();
-
-    protected MatchMapGeneratorConfiguration config;
-
-    protected AtomicInteger progress;
-    protected int toMatchArticlesSize;
+    protected Map<Long, GlobalTFIDFWordVector> vector_cache = new ConcurrentHashMap <Long, GlobalTFIDFWordVector> ();
+    protected TFDictionary dictionary;
+    
+    public MatchMapGeneratorWithGlobalTfIdf ( MatchMapGeneratorConfiguration config ) 
+    {
+		super (config);
+		this.tf_idf_debugger = new TfIdfDebugger ( "GLOBAL" );
 		
-	//DEBUG
-	protected TfIdfDebugger tf_idf_debugger = new TfIdfDebugger ( "CAMBI" );
-
-    public MatchMapGenerator(MatchMapGeneratorConfiguration config) {
-        this.config = config;
-        progress = new AtomicInteger();
-    }
-
-    public MatchMapGenerator(MatchMapGeneratorConfiguration config, Map<Long, Text> bodyCache, Map<Long, Text> keywordCache) {
-        progress = new AtomicInteger();
-        this.config = config;
-        this.bodyCache = bodyCache;
-        this.keywordCache = keywordCache;
+		this.dictionary = (  ( TFIDFWordVectorFactory ) config.getWordVectorFactory()  ).get_dictionary ();
+		
     }
 
     /**
@@ -58,39 +52,42 @@ public class MatchMapGenerator {
                 .distinct()
                 .forEach(article -> {
             Text body = getTextAndApplyFilters(article.getBody());
-            bodyCache.put(article.getId(), body);
             Text title = getTextAndApplyFilters(article.getTitle());
             Text description = getTextAndApplyFilters(article.getDescription());
-            keywordCache.put(article.getId(), config.getKeywordSelectionFn().apply(title, description, body));
+			
+			GlobalTFIDFWordVector w = new GlobalTFIDFWordVector ( dictionary );
+            w.setFrom (  config.getKeywordSelectionFn().apply(title, description, body) );
+			this.vector_cache.put ( article.getId (), w ); 
+			
+			//DEBUG
+			tf_idf_debugger.conditional_debug ( article, w );
+    
         });
 
         // Source Article -> Similarities with all articles
         Map<Article, List<MatchingArticle>> matchMap;
 
         matchMap = articlesToMatch.parallelStream().map(article -> {
-
+			
+			GlobalTFIDFWordVector w = this.vector_cache.get(article.getId());
+			Set <String> words_in_w = new HashSet ( w.getWords () );
+			
             List<MatchingArticle> matchingArticles = knownArticles.parallelStream()
                     .filter(match -> !config.getIgnorePairPredicate().test(article, match))
                     .map(match -> {
 
-                WordVector w = config.getWordVectorFactory().createNewVector();
-                w.setWordsFrom(keywordCache.get(article.getId()), keywordCache.get(match.getId()));
-                w.setValuesFrom(bodyCache.get(article.getId()));
-				
-                WordVector v = config.getWordVectorFactory().createNewVector();
-                v.setWords(w.getWords());
-                v.setValuesFrom(bodyCache.get(match.getId()));
-
-                //DEBUG
-				tf_idf_debugger.conditional_debug ( article, w );
-				tf_idf_debugger.conditional_debug ( match, v );
-				
+                GlobalTFIDFWordVector v = this.vector_cache.get(match.getId());				
+                Set <String> intersection = new HashSet<String>( v.getWords () );
+                intersection.retainAll ( words_in_w );
                 
                 MatchingArticle a = new MatchingArticle();
                 a.setArticle(match);
-
+				
+				double [] w_array = w.get_weight_for ( new ArrayList<String>(intersection) );
+				double [] v_array = v.get_weight_for ( new ArrayList<String>(intersection) );
+				
                 config.getMetrics().forEach(metric ->
-                        a.addSimilarity(metric.getName(), metric.compute(w.toArray(), v.toArray())));
+                        a.addSimilarity ( metric.getName(), metric.compute( w_array, v_array ) ) );
 
                 return a;
             }).collect(Collectors.toList());
@@ -103,22 +100,4 @@ public class MatchMapGenerator {
         return matchMap;
     }
 
-    protected Text getTextAndApplyFilters(String s) {
-        if (s == null) return new Text();
-        Text t = config.getStringToTextFn().apply(s);
-        config.getTextFilters().forEach(t::applyFilter);
-        return t;
-    }
-
-    public double getProgress() {
-        return (double)this.progress.get()/toMatchArticlesSize;
-    }
-
-    public Map<Long, Text> getKeywordCache() {
-        return keywordCache;
-    }
-
-    public Map<Long, Text> getBodyCache() {
-        return bodyCache;
-    }
 }

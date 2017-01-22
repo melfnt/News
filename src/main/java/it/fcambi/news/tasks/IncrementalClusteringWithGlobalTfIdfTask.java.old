@@ -3,7 +3,6 @@ package it.fcambi.news.tasks;
 import it.fcambi.news.Application;
 import it.fcambi.news.async.Task;
 import it.fcambi.news.clustering.MatchMapGenerator;
-import it.fcambi.news.clustering.MatchMapGeneratorWithGlobalTfIdf;
 import it.fcambi.news.clustering.MatchMapGeneratorConfiguration;
 import it.fcambi.news.clustering.Matcher;
 import it.fcambi.news.model.*;
@@ -14,10 +13,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
-/**
- * Created by Francesco on 06/11/15.
- */
-public class IncrementalClusteringTask extends Task {
+public class IncrementalClusteringTaskWithGlobalTfIdf extends Task 
+{
 
     private MatchMapGeneratorConfiguration matchMapConfiguration;
     private Matcher matcher;
@@ -25,7 +22,8 @@ public class IncrementalClusteringTask extends Task {
     private Clustering clustering;
 	
     public IncrementalClusteringTask(MatchMapGeneratorConfiguration matchMapConfiguration, Matcher matcher,
-                                     List<Article> articlesToBeClustered, Clustering clustering) {
+                                     List<Article> articlesToBeClustered, Clustering clustering)
+    {
         super();
         this.matchMapConfiguration = matchMapConfiguration;
         this.matcher = matcher;
@@ -35,17 +33,20 @@ public class IncrementalClusteringTask extends Task {
     }
 
     @Override
-    public String getName() {
+    public String getName()
+    {
         return this.getClass().getName();
     }
 
     @Override
-    public String getDescription() {
-        return "Groups articles about the same event.";
+    public String getDescription() 
+    {
+        return "Groups articles about the same event, using the global TF-IDF";
     }
 
     @Override
-    protected void executeTask() throws Exception {
+    protected void executeTask() throws Exception
+    {
         progress.set(0);
 
         if (Thread.interrupted()) return;
@@ -56,10 +57,8 @@ public class IncrementalClusteringTask extends Task {
 
         articlesToBeClustered = articlesToBeClustered.stream().map(em::merge).collect(Collectors.toList());
 
-        //~ //Configure match map generator
-        //~ MatchMapGenerator matchMapGenerator = new MatchMapGenerator(matchMapConfiguration);
-        //Configure match map generator so thati it uses global tf idf vectors
-        MatchMapGenerator matchMapGenerator = new MatchMapGeneratorWithGlobalTfIdf (matchMapConfiguration);
+        //Configure match map generator
+        MatchMapGenerator matchMapGenerator = new MatchMapGenerator(matchMapConfiguration);
 
         //Prepare set with all articles from existing clusters
         String select = "select a from Article a where key(a.news)=:clusteringName";
@@ -79,19 +78,40 @@ public class IncrementalClusteringTask extends Task {
             assert a.getNews(clustering) != null;
             
         });
-
+		
+		// TODO: insert vector cache here
+		/* Preprocess articles */
+        Stream.concat( articlesToBeClustered.stream(), classifiedArticles.stream()).parallel()
+                .distinct()
+                .forEach(article -> {
+            Text body = matchMapGenerator.getTextAndApplyFilters(article.getBody());
+            bodyCache.put(article.getId(), body);
+            Text title = getTextAndApplyFilters(article.getTitle());
+            Text description = getTextAndApplyFilters(article.getDescription());
+            keywordCache.put(article.getId(), config.getKeywordSelectionFn().apply(title, description, body));
+        });
+		
         Set<News> newsToMerge = new HashSet<>();
 
         //Find a fitting cluster for each article one by one
         // updating classifiedArticles each iteration
-        for (int i=0; i<articlesToBeClustered.size() && !Thread.currentThread().isInterrupted(); i++) {
+        for ( int i=0; i<articlesToBeClustered.size() && !Thread.currentThread().isInterrupted(); ++i )
+        {
             Article article = articlesToBeClustered.get(i);
 			
             //Match map generation
             List<Article> articleToCluster = new LinkedList<>();
             articleToCluster.add(article);
-            Map<Article, List<MatchingArticle>> matchMap = matchMapGenerator.generateMap(
-                    articleToCluster, classifiedArticles);
+            
+            // Cambiare codice qui
+            // 
+            /**
+			 * @param articlesToMatch          Set of articles to match
+			 * @param knownArticles           Set of previously clustered articles
+			 * @return Map that bind each article with a list of possible matchings
+			 */
+			//public Map<Article, List<MatchingArticle>> generateMap(Collection<Article> articlesToMatch, Collection<Article> knownArticles)
+			//Map<Article, List<MatchingArticle>> matchMap = matchMapGenerator.generateMap(articleToCluster, classifiedArticles);
 
             //Find best match
             Map<Article, MatchingNews> bestMatchMap = matcher.findBestMatch(matchMap);
@@ -114,12 +134,6 @@ public class IncrementalClusteringTask extends Task {
             progress.add(progressIncrementA);
 
         }
-
-//        final double progressIncrementB = 0.05/articlesToBeClustered.size();
-
-
-//        System.out.println("# of clusters obtained "+newsToMerge.size());
-
 
         if (!Thread.currentThread().isInterrupted()) {
             em.getTransaction().commit();
