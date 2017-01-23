@@ -20,12 +20,14 @@ public class TFIDFWordVector extends FrequenciesWordVector {
         if (dict == null)
             throw new IllegalArgumentException("Cannot instantiate TFIDFWordVector without TFDictionary.");
         dictionary = dict;
+        //~ System.out.println ("creating new TFIDFWordVector");
     }
 
     @Override
     public void setFrom(Text...texts) {
         super.setFrom(texts);
         weights.clear();
+        //~ System.out.println ("weights before "+weights);
         computeWeights(frequencies.stream().reduce(0.0, (a,b) -> a+b));
     }
 
@@ -37,13 +39,21 @@ public class TFIDFWordVector extends FrequenciesWordVector {
     public void setValuesFrom(Text... texts) {
         super.setValuesFrom(texts);
         weights.clear();
+        //~ System.out.println ("set values: weights before "+weights);
         computeWeights(Arrays.stream(texts).mapToDouble(text -> text.words().size()).reduce(0.0, (a,b) -> a+b));
     }
 
-    private void computeWeights(double documentSize) {
+    private void computeWeights(double documentSize)
+    {
+		//~ System.out.println ("computing weights - documentSize: "+documentSize);
+		//~ System.out.println ("words in vector: "+words);
         for (int i=0; i < words.size(); i++) {
+            //~ System.out.println ("current word: "+ words.get(i) );
             double w = (frequencies.get(i)/documentSize)*
                     Math.log((double)dictionary.getNumOfDocuments()/dictionary.getNumOfDocumentsWithWord(words.get(i)));
+            //~ System.out.println ("tf value: "+frequencies.get(i)/documentSize);
+            //~ System.out.println ("idf value: "+Math.log((double)dictionary.getNumOfDocuments()/dictionary.getNumOfDocumentsWithWord(words.get(i))));
+            //~ System.out.println ("tf-idf value: "+w);
             weights.add(w);
         }
     }

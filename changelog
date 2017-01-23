@@ -1,4 +1,10 @@
-News ver 0.6.1.1
+ws ver 0.6.1.2
+ 
+  * set configuration to global tfidf vectors and bugfix in vectors calculation.
+  
+-- Lucio Messina <luciomessina94@gmail.com> Mon, 23 Jan 2017 23:36:07 +0200
+
+ws ver 0.6.1.1
  
   * reset configuration to non-global tfidf vectors to evaluate time performance against global ones.
   

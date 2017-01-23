@@ -16,7 +16,9 @@ import java.util.stream.Stream;
 
 //DEBUG
 import it.fcambi.news.debug.TfIdfDebugger;
-
+import java.util.Scanner;
+import it.fcambi.news.data.GlobalTFIDFWordVector;
+import it.fcambi.news.data.TFIDFWordVectorFactory;
 
 public class MatchMapGenerator {
 
@@ -67,15 +69,30 @@ public class MatchMapGenerator {
         // Source Article -> Similarities with all articles
         Map<Article, List<MatchingArticle>> matchMap;
 
-        matchMap = articlesToMatch.parallelStream().map(article -> {
+        //~ matchMap = articlesToMatch.parallelStream().map(article -> {
+        matchMap = articlesToMatch.stream().map(article -> {
 
             List<MatchingArticle> matchingArticles = knownArticles.parallelStream()
                     .filter(match -> !config.getIgnorePairPredicate().test(article, match))
                     .map(match -> {
 
-                WordVector w = config.getWordVectorFactory().createNewVector();
-                w.setWordsFrom(keywordCache.get(article.getId()), keywordCache.get(match.getId()));
+                
+				//DEBUG
+				System.out.println ("Article id: "+article.getId());
+				System.out.println ("Keywords: \n"+bodyCache.get(article.getId()));
+				
+				WordVector w = config.getWordVectorFactory().createNewVector();
+				w.setWordsFrom(keywordCache.get(article.getId()), keywordCache.get(match.getId()));
                 w.setValuesFrom(bodyCache.get(article.getId()));
+				
+				//DEBUG
+				System.out.println ("[GLOBAL] creating new global tf-idf vector");
+				GlobalTFIDFWordVector gw = new GlobalTFIDFWordVector ( (  ( TFIDFWordVectorFactory ) config.getWordVectorFactory()  ).get_dictionary () );
+				System.out.println ("[GLOBAL] setting (words) from "+bodyCache.get(article.getId()));
+				w.setWordsFrom (keywordCache.get(article.getId()));
+                w.setValuesFrom(bodyCache.get(article.getId()));
+				
+				new Scanner(System.in).nextLine ();
 				
                 WordVector v = config.getWordVectorFactory().createNewVector();
                 v.setWords(w.getWords());

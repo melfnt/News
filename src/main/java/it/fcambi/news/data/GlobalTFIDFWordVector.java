@@ -18,13 +18,15 @@ public class GlobalTFIDFWordVector extends TFIDFWordVector
 	}
 	
     @Override
-    public void setFrom(Text...texts)
+    public void setValuesFrom(Text...texts)
     {
-        super.setFrom ( texts );
+        super.setValuesFrom ( texts );
         List <Double> weights = this.getValues ();
         List <String> words = this.getWords ();
+        //~ System.out.println ("[GLOBAL] copying into the map");
         for ( int i=0; i<words.size(); ++i )
         {
+			//~ System.out.println ("[GLOBAL] "+words.get(i)+" => "+weights.get(i));
 			this.weights_map.put ( words.get(i), weights.get(i) );
 		}
     }

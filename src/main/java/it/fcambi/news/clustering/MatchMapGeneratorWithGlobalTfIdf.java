@@ -48,7 +48,8 @@ public class MatchMapGeneratorWithGlobalTfIdf extends MatchMapGenerator
             Text description = getTextAndApplyFilters(article.getDescription());
 			
 			GlobalTFIDFWordVector w = new GlobalTFIDFWordVector ( dictionary );
-            w.setFrom (  config.getKeywordSelectionFn().apply(title, description, body) );
+            w.setWordsFrom (  config.getKeywordSelectionFn().apply(title, description, body) );
+            w.setValuesFrom (  body );
 			this.vector_cache.put ( article.getId (), w ); 
 			
 			//DEBUG
