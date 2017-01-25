@@ -11,7 +11,10 @@ import java.io.FileWriter;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
+import java.util.Arrays;
+
 import it.fcambi.news.Logging;
+
 
 public class TfIdfDebugger
 {
@@ -45,12 +48,17 @@ public class TfIdfDebugger
 		
 	}
 	
+	private boolean should_be_debugged ( long id )
+	{
+		return (  ( this._A * id + this._B ) % _DEBUG_ONE_ARTICLE_EVERY  ) == 3; 
+	}
+	
 	public void conditional_debug ( Article a, WordVector vector )
 	{
 		long id = a.getId();
 		try
 		{		
-			if (   (  ( this._A * id + this._B ) % _DEBUG_ONE_ARTICLE_EVERY  ) == 3  &&  ! already_debugged.contains (id)   )
+			if (  should_be_debugged ( id )  &&  ! already_debugged.contains (id)   )
 			{
 				log.info("conditional debugging on article with id="+id+". Its permutation is "+(  ( this._A * id + this._B ) % _DEBUG_ONE_ARTICLE_EVERY  ) );
 				FileWriter fw = new FileWriter( _DEBUG_DIRECTORY + "article_" + id + "_" + filename_suffix );
@@ -71,6 +79,32 @@ public class TfIdfDebugger
 		} catch ( IOException e )
 		{
 			log.warning ("Error while writing to file for article with id"+id+": "+e.toString());
+		}
+	}
+	
+	public void conditional_metric_debug ( String metric_name, long id1, long id2, double value, double[] w, double[] v, List<String> words )
+	{
+		try
+		{		
+			if ( should_be_debugged (id1) && should_be_debugged (id2) )
+			{
+				log.info("conditional metric debugging on articles with id="+id1+" and "+id2);
+				FileWriter fw = new FileWriter( _DEBUG_DIRECTORY + "metric_" + metric_name + "-" + id1 + "_" + id2 + "_" + filename_suffix );
+				fw.write ( "word\t" );
+				fw.write ( id1 + "\t" );
+				fw.write ( id2 + "\n" );
+				for ( int i=0; i<w.length; ++i )
+				{
+					fw.write ( words.get(i) + "\t" );
+					fw.write ( w[i] + "\t" );
+					fw.write ( v[i] + "\n" );
+				}
+				fw.write ( metric_name + ": " + value + "\n" );
+				fw.close ();
+			}
+		} catch ( IOException e )
+		{
+			log.warning ("Error while writing to file for article with ids= "+id1+" and "+id2+":"+e.toString());
 		}
 	}
 	

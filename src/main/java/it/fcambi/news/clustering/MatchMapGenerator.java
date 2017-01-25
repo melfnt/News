@@ -77,22 +77,22 @@ public class MatchMapGenerator {
                     .map(match -> {
 
                 
-				//DEBUG
-				System.out.println ("Article id: "+article.getId());
-				System.out.println ("Keywords: \n"+bodyCache.get(article.getId()));
+				//~ //DEBUG
+				//~ System.out.println ("Article id: "+article.getId());
+				//~ System.out.println ("Keywords: \n"+bodyCache.get(article.getId()));
 				
 				WordVector w = config.getWordVectorFactory().createNewVector();
 				w.setWordsFrom(keywordCache.get(article.getId()), keywordCache.get(match.getId()));
                 w.setValuesFrom(bodyCache.get(article.getId()));
 				
-				//DEBUG
-				System.out.println ("[GLOBAL] creating new global tf-idf vector");
-				GlobalTFIDFWordVector gw = new GlobalTFIDFWordVector ( (  ( TFIDFWordVectorFactory ) config.getWordVectorFactory()  ).get_dictionary () );
-				System.out.println ("[GLOBAL] setting (words) from "+bodyCache.get(article.getId()));
-				w.setWordsFrom (keywordCache.get(article.getId()));
-                w.setValuesFrom(bodyCache.get(article.getId()));
+				//~ //DEBUG
+				//~ System.out.println ("[GLOBAL] creating new global tf-idf vector");
+				//~ GlobalTFIDFWordVector gw = new GlobalTFIDFWordVector ( (  ( TFIDFWordVectorFactory ) config.getWordVectorFactory()  ).get_dictionary () );
+				//~ System.out.println ("[GLOBAL] setting (words) from "+bodyCache.get(article.getId()));
+				//~ gw.setWordsFrom (keywordCache.get(article.getId()));
+                //~ gw.setValuesFrom(bodyCache.get(article.getId()));
 				
-				new Scanner(System.in).nextLine ();
+				//~ new Scanner(System.in).nextLine ();
 				
                 WordVector v = config.getWordVectorFactory().createNewVector();
                 v.setWords(w.getWords());
@@ -105,10 +105,14 @@ public class MatchMapGenerator {
                 
                 MatchingArticle a = new MatchingArticle();
                 a.setArticle(match);
-
-                config.getMetrics().forEach(metric ->
-                        a.addSimilarity(metric.getName(), metric.compute(w.toArray(), v.toArray())));
-
+				
+				config.getMetrics().forEach(metric ->
+                //DEBUG
+                {
+                        a.addSimilarity(metric.getName(), metric.compute(w.toArray(), v.toArray()));
+						tf_idf_debugger.conditional_metric_debug ( metric.getName(), article.getId(), match.getId(), metric.compute(w.toArray(), v.toArray()), w.toArray(), v.toArray(), w.getWords() );
+				} );
+				
                 return a;
             }).collect(Collectors.toList());
 

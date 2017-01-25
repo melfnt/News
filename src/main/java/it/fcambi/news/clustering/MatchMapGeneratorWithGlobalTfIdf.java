@@ -21,6 +21,7 @@ import java.util.stream.Stream;
 
 //DEBUG
 import it.fcambi.news.debug.TfIdfDebugger;
+import java.util.Scanner;
 
 public class MatchMapGeneratorWithGlobalTfIdf extends MatchMapGenerator
 {
@@ -53,7 +54,7 @@ public class MatchMapGeneratorWithGlobalTfIdf extends MatchMapGenerator
 			this.vector_cache.put ( article.getId (), w ); 
 			
 			//DEBUG
-			tf_idf_debugger.conditional_debug ( article, w );
+			//~ tf_idf_debugger.conditional_debug ( article, w );
     
         });
 	}
@@ -80,18 +81,21 @@ public class MatchMapGeneratorWithGlobalTfIdf extends MatchMapGenerator
                     .map(match -> {
 
                 GlobalTFIDFWordVector v = this.vector_cache.get(match.getId());				
-                Set <String> intersection = new HashSet<String>( v.getWords () );
-                intersection.retainAll ( words_in_w );
+                Set <String> union = new HashSet<String>( v.getWords () );
+                union.addAll ( words_in_w );
                 
                 MatchingArticle a = new MatchingArticle();
                 a.setArticle(match);
 				
-				double [] w_array = w.get_weight_for ( new ArrayList<String>(intersection) );
-				double [] v_array = v.get_weight_for ( new ArrayList<String>(intersection) );
+				double [] w_array = w.get_weight_for ( new ArrayList<String>(union) );
+				double [] v_array = v.get_weight_for ( new ArrayList<String>(union) );
 				
                 config.getMetrics().forEach(metric ->
-                        a.addSimilarity ( metric.getName(), metric.compute( w_array, v_array ) ) );
-
+                //DEBUG
+                {
+                        a.addSimilarity ( metric.getName(), metric.compute( w_array, v_array ) ) ;
+					//	tf_idf_debugger.conditional_metric_debug ( metric.getName(), article.getId(), match.getId(), metric.compute( w_array, v_array ), w_array, v_array, new ArrayList<String> (union) );
+				} );
                 return a;
             }).collect(Collectors.toList());
 

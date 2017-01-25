@@ -120,11 +120,6 @@ public class IncrementalClusteringTask extends Task {
 
         }
 
-//        final double progressIncrementB = 0.05/articlesToBeClustered.size();
-
-
-//        System.out.println("# of clusters obtained "+newsToMerge.size());
-
 
         if (!Thread.currentThread().isInterrupted()) {
             em.getTransaction().commit();

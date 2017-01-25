@@ -36,7 +36,8 @@ public class GlobalTFIDFWordVector extends TFIDFWordVector
 		double [] ret = new double [ words.size () ];
 		for ( int i=0; i<words.size(); ++i )
 		{
-			ret[i] = this.weights_map.get ( words.get(i) );
+			Double val = this.weights_map.get ( words.get(i) );
+			ret[i] = ( val==null ? 0 : val ); 
 		}
 		return ret;
 	}
