@@ -1,3 +1,9 @@
+News ver 0.6.3
+ 
+  * Using global tfid also when evalutating performance
+  
+-- Lucio Messina <luciomessina94@gmail.com> Wed, 25 Jan 2017 18:09:52 +0200
+
 News ver 0.6.2
  
   * Normalized tfidf vectors to improve speed

@@ -3,6 +3,7 @@ package it.fcambi.news.tasks;
 import it.fcambi.news.Application;
 import it.fcambi.news.async.Task;
 import it.fcambi.news.clustering.MatchMapGenerator;
+import it.fcambi.news.clustering.MatchMapGeneratorWithGlobalTfIdf;
 import it.fcambi.news.clustering.MatchMapGeneratorConfiguration;
 import it.fcambi.news.clustering.Matcher;
 import it.fcambi.news.clustering.MatcherFactory;
@@ -21,7 +22,8 @@ import java.util.stream.IntStream;
 /**
  * Created by Francesco on 23/12/15.
  */
-public class ClusteringPerformanceTask extends Task {
+public class ClusteringPerformanceTask extends Task
+{
 
     protected MatchMapGeneratorConfiguration conf;
     protected Metric metric;
@@ -95,8 +97,12 @@ public class ClusteringPerformanceTask extends Task {
 
         List<News> testNews = generateClustering(testSet, news, test);
 
-        MatchMapGenerator generator = new MatchMapGenerator(conf);
-
+        //~ MatchMapGenerator generator = new MatchMapGenerator(conf);
+        MatchMapGeneratorWithGlobalTfIdf generator = new MatchMapGeneratorWithGlobalTfIdf(conf);
+		generator.process_articles_and_add_to_cache ( trainingSet );
+		generator.process_articles_and_add_to_cache ( testSet );
+		
+		
         double progressIncrement = 0.98/(trainingSet.size()+testSet.size());
 
         //Clustering and evaluating training set
