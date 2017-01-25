@@ -48,7 +48,8 @@ public class MatchMapGeneratorConfigurationParser
 
         switch (metricName) {
             case "cosine":
-                metric = new CosineSimilarity();
+                metric = new CosineSimilarityNormalized();
+                //~ metric = new CosineSimilarity();
                 break;
             case "jaccard":
                 metric = new JaccardSimilarity();

@@ -1,17 +1,23 @@
-ws ver 0.6.1.3
+News ver 0.6.2
+ 
+  * Normalized tfidf vectors to improve speed
+  
+-- Lucio Messina <luciomessina94@gmail.com> Wed, 25 Jan 2017 16:52:00 +0200
+
+News ver 0.6.1.3
  
   * bugfix in vectors keyword and values selection.
   * improved debug methods
   
 -- Lucio Messina <luciomessina94@gmail.com> Wed, 25 Jan 2017 12:00:36 +0200
 
-ws ver 0.6.1.2
+News ver 0.6.1.2
  
   * set configuration to global tfidf vectors and bugfix in vectors calculation.
   
 -- Lucio Messina <luciomessina94@gmail.com> Mon, 23 Jan 2017 23:36:07 +0200
 
-ws ver 0.6.1.1
+News ver 0.6.1.1
  
   * reset configuration to non-global tfidf vectors to evaluate time performance against global ones.
   

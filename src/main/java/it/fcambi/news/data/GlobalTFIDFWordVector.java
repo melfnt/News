@@ -23,11 +23,10 @@ public class GlobalTFIDFWordVector extends TFIDFWordVector
         super.setValuesFrom ( texts );
         List <Double> weights = this.getValues ();
         List <String> words = this.getWords ();
-        //~ System.out.println ("[GLOBAL] copying into the map");
+        double norm = Math.sqrt ( weights.stream ().reduce (0.0, (a, b) -> a+b*b ) );
         for ( int i=0; i<words.size(); ++i )
         {
-			//~ System.out.println ("[GLOBAL] "+words.get(i)+" => "+weights.get(i));
-			this.weights_map.put ( words.get(i), weights.get(i) );
+			this.weights_map.put ( words.get(i), weights.get(i)/norm );
 		}
     }
     
@@ -36,8 +35,9 @@ public class GlobalTFIDFWordVector extends TFIDFWordVector
 		double [] ret = new double [ words.size () ];
 		for ( int i=0; i<words.size(); ++i )
 		{
-			Double val = this.weights_map.get ( words.get(i) );
-			ret[i] = ( val==null ? 0 : val ); 
+			//~ Double val = this.weights_map.get ( words.get(i) );
+			//~ ret[i] = ( val==null ? 0 : val ); 
+			ret[i] = this.weights_map.get ( words.get(i) ) ;
 		}
 		return ret;
 	}

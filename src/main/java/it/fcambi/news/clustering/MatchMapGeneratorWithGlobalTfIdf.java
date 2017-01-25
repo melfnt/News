@@ -49,7 +49,7 @@ public class MatchMapGeneratorWithGlobalTfIdf extends MatchMapGenerator
             Text description = getTextAndApplyFilters(article.getDescription());
 			
 			GlobalTFIDFWordVector w = new GlobalTFIDFWordVector ( dictionary );
-            w.setWordsFrom (  config.getKeywordSelectionFn().apply(title, description, body) );
+            w.setWordsFrom (  config.getKeywordSelectionFn().apply (title, description, body) );
             w.setValuesFrom (  body );
 			this.vector_cache.put ( article.getId (), w ); 
 			
@@ -64,14 +64,16 @@ public class MatchMapGeneratorWithGlobalTfIdf extends MatchMapGenerator
      * @param knownArticles           Set of previously clustered articles
      * @return Map that bind each article with a list of possible matchings
      */
-    public Map<Article, List<MatchingArticle>> generateMap(Collection<Article> articlesToMatch, Collection<Article> knownArticles) {
+    public Map<Article, List<MatchingArticle>> generateMap(Collection<Article> articlesToMatch, Collection<Article> knownArticles)
+    {
         progress.set(0);
         toMatchArticlesSize = articlesToMatch.size();
 
         // Source Article -> Similarities with all articles
         Map<Article, List<MatchingArticle>> matchMap;
 
-        matchMap = articlesToMatch.parallelStream().map(article -> {
+        matchMap = articlesToMatch.parallelStream().map(article -> 
+        {
 			
 			GlobalTFIDFWordVector w = this.vector_cache.get(article.getId());
 			Set <String> words_in_w = new HashSet ( w.getWords () );
@@ -81,14 +83,14 @@ public class MatchMapGeneratorWithGlobalTfIdf extends MatchMapGenerator
                     .map(match -> {
 
                 GlobalTFIDFWordVector v = this.vector_cache.get(match.getId());				
-                Set <String> union = new HashSet<String>( v.getWords () );
-                union.addAll ( words_in_w );
+                Set <String> intersection = new HashSet<String>( v.getWords () );
+                intersection.retainAll ( words_in_w );
                 
                 MatchingArticle a = new MatchingArticle();
                 a.setArticle(match);
 				
-				double [] w_array = w.get_weight_for ( new ArrayList<String>(union) );
-				double [] v_array = v.get_weight_for ( new ArrayList<String>(union) );
+				double [] w_array = w.get_weight_for ( new ArrayList<String>(intersection) );
+				double [] v_array = v.get_weight_for ( new ArrayList<String>(intersection) );
 				
                 config.getMetrics().forEach(metric ->
                 //DEBUG
