@@ -8,6 +8,7 @@ import it.fcambi.news.model.Language;
 import it.fcambi.news.model.NoiseWordsList;
 import it.fcambi.news.model.auth.User;
 import it.fcambi.news.tasks.ArticlesDownloaderTask;
+import it.fcambi.news.tasks.GoogleClustersImportTask;
 import it.fcambi.news.tasks.MultilevelClusteringPerformanceTask;
 import it.fcambi.news.tasks.MultilevelIncrementalClusteringTask;
 import it.fcambi.news.ws.server.Server;
@@ -254,6 +255,7 @@ public class Application {
         });
 
         configureArticleDownloaderTask();
+        configureGoogleClustersImportTask();
 
         log.info("Startup Completed - All OK");
 
@@ -286,6 +288,22 @@ public class Application {
 
         task.setScheduleTime(schedule);
         task.setPeriod(60*60*1000);
+
+        scheduler.schedule(task);
+    }
+    
+    private static void configureGoogleClustersImportTask() 
+    {
+        if (!Boolean.parseBoolean(props.getProp("GOOGLE_NEWS_CLUSTERS_IMPORT"))) return;
+        log.info("Configuring Google news clusters import task...");
+        GoogleClustersImportTask task = new GoogleClustersImportTask();
+        task.setCreator(Application.class.getName());
+		
+		long now = System.currentTimeMillis() / 3600000;
+        Date schedule = new Date(now);
+
+        task.setScheduleTime(schedule);
+        task.setPeriod(23*60*60*1000);
 
         scheduler.schedule(task);
     }

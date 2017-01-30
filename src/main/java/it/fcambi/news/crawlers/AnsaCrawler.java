@@ -30,6 +30,7 @@ public class AnsaCrawler implements Crawler {
         Article a = new Article();
 //        a.setSourceHtml(d.html());
         a.setSource(Newspaper.ANSA);
+        a.setSourceUrl(url);
 
         //Retrieve title
         try {

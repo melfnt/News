@@ -158,4 +158,10 @@ public class News implements Cluster {
     public Cluster getParent(Clustering clustering) {
         return (Cluster) this.metanews;
     }
+    
+    @Override
+    public String toString ()
+    {
+		return "news: "+description+". Contains "+articles.size()+" articles.";
+    }
 }

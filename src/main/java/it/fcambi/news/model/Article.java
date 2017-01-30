@@ -209,4 +209,10 @@ public class Article implements Cluster {
     public Cluster getParent(Clustering clustering) {
         return this.news.get(clustering.getName());
     }
+    
+    @Override
+    public String toString ()
+    {
+        return "id: " + id + " title: "+title;
+    }
 }
