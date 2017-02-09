@@ -65,7 +65,7 @@ angular.module("NewsApp")
                 if (value && value != "")
                     url += key+"="+value+"&"
             });
-
+						
             loadingSpinner.begin();
             $http.get(url)
                 .then(function (response) {

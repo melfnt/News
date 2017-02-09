@@ -29,4 +29,12 @@ public class NewspapersPoints {
 
         return p;
     }
+    
+    public String toString ()
+    {
+		StringBuilder s = new StringBuilder ();
+		for ( int i = 0; i < points.length; ++i )
+            s.append ( (newspapers[i] + " -> "+ points[i])+"\n" );
+        return s.toString();
+	}
 }

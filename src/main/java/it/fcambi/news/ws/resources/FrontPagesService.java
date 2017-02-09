@@ -25,6 +25,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import java.text.SimpleDateFormat;
+
 /**
  * Created by Francesco on 12/10/15.
  */
@@ -276,6 +278,8 @@ public class FrontPagesService {
 
         List<FrontPage> pages = pagesQuery.getResultList();
 
+		System.out.println ("pages: "+pages.toString());
+		
         if (pages.size() == 0) {
             return Response.status(400).entity("\"Empty dataset\"").build();
         }
@@ -285,13 +289,19 @@ public class FrontPagesService {
         FrontPagesClustering fpc = new FrontPagesClustering();
         List<FrontPagesTimestampGroup> groups = fpc.groupFrontPagesByTimestamp(pages);
 
+		System.out.println ("groups: "+groups.toString());
+		
         KendallTau tau = new KendallTau(10);
 
         List<NewspapersDistance> distancesByTimestamp = new Vector<>();
 
         //Generates distances matrix between newspapers for each time range
-        groups.stream().filter(g -> g.getFrontPages().size() == 6).forEachOrdered(group -> {
+        groups.stream().filter(g -> g.getFrontPages().size() == 9).forEachOrdered(group -> {
+        //~ groups.stream().forEachOrdered(group -> {
 
+            System.out.println ("group with timestamp: "+group.getTimestamp().getTime());
+            System.out.println ("  has "+group.getFrontPages().size()+" frontpages");
+            
             group.getFrontPages().sort((a, b) -> a.getNewspaper().compareTo(b.getNewspaper()));
 
             double[][] distances = new double[group.getFrontPages().size()][group.getFrontPages().size()];
@@ -341,7 +351,7 @@ public class FrontPagesService {
             end.add(timeUm, timeStep);
 
             // Sum and count elements of this group
-            double[][] sum = new double[6][6];
+            double[][] sum = new double[9][9];
             int count = 0;
             for (int j = i; j < distancesByTimestamp.size(); j++) {
                 if (distancesByTimestamp.get(j).getTimestamp().before(end)) {
@@ -375,7 +385,9 @@ public class FrontPagesService {
                     new NewspapersPoints(points, Newspaper.values()));
 
         });
-
+		
+		System.out.println ( "points by time:" + pointsByTime.toString() );
+		
         return Response.status(200).entity(pointsByTime).build();
 
 
