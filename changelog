@@ -1,3 +1,9 @@
+News ver 0.8
+ 
+  * Bugfix in FrontPageService: now the right newspaper names are used if one or more frontpages contain no articles.
+ 
+-- Lucio Messina <luciomessina94@gmail.com> Sun, 12 Feb 2017 12:36:14 +0200
+
 News ver 0.7
  
   * Completed implementing global tdidf

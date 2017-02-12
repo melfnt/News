@@ -295,16 +295,19 @@ public class FrontPagesService {
 
         List<NewspapersDistance> distancesByTimestamp = new Vector<>();
 
+		// TODO: change this if you want to compare fewer or less newspaper
+		int maximum_number_of_newspaper_in_group = groups.stream().map( g -> g.getFrontPages().size() ).max( Integer::max ).get();
+		
         //Generates distances matrix between newspapers for each time range
-        groups.stream().filter(g -> g.getFrontPages().size() == 9).forEachOrdered(group -> {
-        //~ groups.stream().forEachOrdered(group -> {
+        groups.stream().filter(g -> g.getFrontPages().size() == maximum_number_of_newspaper_in_group).forEachOrdered(group -> {
 
             System.out.println ("group with timestamp: "+group.getTimestamp().getTime());
             System.out.println ("  has "+group.getFrontPages().size()+" frontpages");
+            group.getFrontPages().stream().forEach( f -> System.out.println ("  "+f.getId()) );
             
             group.getFrontPages().sort((a, b) -> a.getNewspaper().compareTo(b.getNewspaper()));
 
-            double[][] distances = new double[group.getFrontPages().size()][group.getFrontPages().size()];
+            double[][] distances = new double[ maximum_number_of_newspaper_in_group ][ maximum_number_of_newspaper_in_group ];
 
             for (int i = 0; i < distances.length; i++)
                 for (int j = 0; j < distances[i].length; j++) {
@@ -324,7 +327,14 @@ public class FrontPagesService {
 
             distancesByTimestamp.add(new NewspapersDistance(distances, group.getTimestamp()));
         });
-
+		
+		//TODO change this: it could be inexact
+		Newspaper[] considered_newspapers = new Newspaper[maximum_number_of_newspaper_in_group];
+		for ( int i=0; i<maximum_number_of_newspaper_in_group; ++i )
+		{
+			considered_newspapers[i] = groups.get(0).getFrontPages().get(i).getNewspaper();
+		}
+		
         //Aggregate distances by a certain time step
         List<NewspapersDistance> distancesByTimeStep = new Vector<>();
 
@@ -351,7 +361,7 @@ public class FrontPagesService {
             end.add(timeUm, timeStep);
 
             // Sum and count elements of this group
-            double[][] sum = new double[9][9];
+            double[][] sum = new double[maximum_number_of_newspaper_in_group][maximum_number_of_newspaper_in_group];
             int count = 0;
             for (int j = i; j < distancesByTimestamp.size(); j++) {
                 if (distancesByTimestamp.get(j).getTimestamp().before(end)) {
@@ -382,7 +392,7 @@ public class FrontPagesService {
             double[][] points = MultidimensionalScaling.exec(group.getDistances());
 
             pointsByTime.put(group.getTimestamp().getTime(),
-                    new NewspapersPoints(points, Newspaper.values()));
+                    new NewspapersPoints( points, considered_newspapers ));
 
         });
 		
@@ -408,7 +418,5 @@ public class FrontPagesService {
             }
         }
     }
-
-
 
 }
