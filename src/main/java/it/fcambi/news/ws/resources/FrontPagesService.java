@@ -278,7 +278,7 @@ public class FrontPagesService {
 
         List<FrontPage> pages = pagesQuery.getResultList();
 
-		System.out.println ("pages: "+pages.toString());
+		//~ System.out.println ("pages: "+pages.toString());
 		
         if (pages.size() == 0) {
             return Response.status(400).entity("\"Empty dataset\"").build();
@@ -289,7 +289,7 @@ public class FrontPagesService {
         FrontPagesClustering fpc = new FrontPagesClustering();
         List<FrontPagesTimestampGroup> groups = fpc.groupFrontPagesByTimestamp(pages);
 
-		System.out.println ("groups: "+groups.toString());
+		//~ System.out.println ("groups: "+groups.toString());
 		
         KendallTau tau = new KendallTau(10);
 
@@ -301,9 +301,9 @@ public class FrontPagesService {
         //Generates distances matrix between newspapers for each time range
         groups.stream().filter(g -> g.getFrontPages().size() == maximum_number_of_newspaper_in_group).forEachOrdered(group -> {
 
-            System.out.println ("group with timestamp: "+group.getTimestamp().getTime());
-            System.out.println ("  has "+group.getFrontPages().size()+" frontpages");
-            group.getFrontPages().stream().forEach( f -> System.out.println ("  "+f.getId()) );
+            //~ System.out.println ("group with timestamp: "+group.getTimestamp().getTime());
+            //~ System.out.println ("  has "+group.getFrontPages().size()+" frontpages");
+            //~ group.getFrontPages().stream().forEach( f -> System.out.println ("  "+f.getId()) );
             
             group.getFrontPages().sort((a, b) -> a.getNewspaper().compareTo(b.getNewspaper()));
 
@@ -396,7 +396,7 @@ public class FrontPagesService {
 
         });
 		
-		System.out.println ( "points by time:" + pointsByTime.toString() );
+		//~ System.out.println ( "points by time:" + pointsByTime.toString() );
 		
         return Response.status(200).entity(pointsByTime).build();
 
