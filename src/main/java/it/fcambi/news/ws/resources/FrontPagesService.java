@@ -287,19 +287,34 @@ public class FrontPagesService {
         em.close();
 
         FrontPagesClustering fpc = new FrontPagesClustering();
-        List<FrontPagesTimestampGroup> groups = fpc.groupFrontPagesByTimestamp(pages);
+        List<FrontPagesTimestampGroup> all_groups = fpc.groupFrontPagesByTimestamp(pages);
 
 		//~ System.out.println ("groups: "+groups.toString());
+		
+		//TODO change this: let the user choose which Newspaper to show
+		Set <Newspaper> newspaper_set = new HashSet<Newspaper> ( Arrays.asList ( 
+									Newspaper.LA_REPUBBLICA, Newspaper.IL_GIORNALE, Newspaper.LA_STAMPA, 
+									Newspaper.CORRIERE_DELLA_SERA, Newspaper.ANSA, Newspaper.ADNKRONOS,
+									Newspaper.IL_FATTO_QUOTIDIANO, Newspaper.IL_POST, Newspaper.IL_SECOLO_XIX ) );
+		int maximum_number_of_newspaper_in_group = newspaper_set.size();
+		
+		List<FrontPagesTimestampGroup> groups = all_groups.parallelStream().filter ( g -> 
+			 g.getFrontPages().size() == maximum_number_of_newspaper_in_group 
+			 && g.getFrontPages().parallelStream().allMatch 
+			 ( 
+				f -> newspaper_set.contains ( f.getNewspaper() ) 
+			 )
+			 ).collect(Collectors.toList());
+		
+		Newspaper[] considered_newspapers = newspaper_set.toArray(new Newspaper[newspaper_set.size()]);
 		
         KendallTau tau = new KendallTau(10);
 
         List<NewspapersDistance> distancesByTimestamp = new Vector<>();
-
-		// TODO: change this if you want to compare fewer or less newspaper
-		int maximum_number_of_newspaper_in_group = groups.stream().map( g -> g.getFrontPages().size() ).max( Integer::max ).get();
+		
 		
         //Generates distances matrix between newspapers for each time range
-        groups.stream().filter(g -> g.getFrontPages().size() == maximum_number_of_newspaper_in_group).forEachOrdered(group -> {
+        groups.stream().forEachOrdered(group -> {
 
             //~ System.out.println ("group with timestamp: "+group.getTimestamp().getTime());
             //~ System.out.println ("  has "+group.getFrontPages().size()+" frontpages");
@@ -327,14 +342,7 @@ public class FrontPagesService {
 
             distancesByTimestamp.add(new NewspapersDistance(distances, group.getTimestamp()));
         });
-		
-		//TODO change this: it could be inexact
-		Newspaper[] considered_newspapers = new Newspaper[maximum_number_of_newspaper_in_group];
-		for ( int i=0; i<maximum_number_of_newspaper_in_group; ++i )
-		{
-			considered_newspapers[i] = groups.get(0).getFrontPages().get(i).getNewspaper();
-		}
-		
+				
         //Aggregate distances by a certain time step
         List<NewspapersDistance> distancesByTimeStep = new Vector<>();
 

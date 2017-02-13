@@ -1,3 +1,9 @@
+News ver 0.8.1
+ 
+  * just another little bugfix in FrontPageService.
+ 
+-- Lucio Messina <luciomessina94@gmail.com> Mon, 13 Feb 2017 11:20:36 +0200
+
 News ver 0.8
  
   * Bugfix in FrontPageService: now the right newspaper names are used if one or more frontpages contain no articles.
