@@ -1,3 +1,9 @@
+News ver 0.9
+ 
+  * Now ManualClusteringService is always performed against the news in the clustering with name "for_revision". That clustering name can be configured.
+ 
+-- Lucio Messina <luciomessina94@gmail.com> Mon, 13 Feb 2017 17:34:20 +0200
+
 News ver 0.8.1
  
   * just another little bugfix in FrontPageService.

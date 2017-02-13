@@ -3,6 +3,7 @@ package it.fcambi.news.ws.resources;
 import it.fcambi.news.Application;
 import it.fcambi.news.Logging;
 import it.fcambi.news.model.Article;
+import it.fcambi.news.model.Clustering;
 import it.fcambi.news.model.ClusteringRevision;
 import it.fcambi.news.ws.resources.dto.RemovedArticlesDTO;
 import it.fcambi.news.ws.resources.dto.ClusterDTO;
@@ -28,7 +29,7 @@ import java.util.stream.Collectors;
 public class ManualClusteringService
 {
 	
-	private final long _FIRST_SELECTABLE_CLUSTER = 75121;
+	private final String _FOR_REVISION_CLUSTERING_NAME = "for_revision";
 	private final int _NUMBER_OF_ARTICLES_TO_BE_SHOWN = 100;
 	private final Logger log = Logging.registerLogger("it.fcambi.news.ManualClustering");
 	private final Random random_generator = new Random ();
@@ -55,11 +56,19 @@ public class ManualClusteringService
 		return null;
     }
     
-    private ClusterDTO getRandomCluster ()
+    private ClusterDTO getRandomCluster () throws Exception
     {
+		
 		EntityManager em = Application.createEntityManager();
-		long selected_cluster = em.createQuery("select n.id from News n join n.articles k where n.id>:firstSelectableCluster group by n.id having count(*)>1 order by rand()", Long.class)
-								.setParameter("firstSelectableCluster", _FIRST_SELECTABLE_CLUSTER-1)
+		
+		Clustering clustering = em.find( Clustering.class, _FOR_REVISION_CLUSTERING_NAME );
+        if (clustering == null)
+        {
+			throw new IllegalArgumentException("Cannot find for_revision clustering");
+        }
+        
+		long selected_cluster = em.createQuery("select n.id from News n join n.articles k where n.clustering=:clustering group by n.id having count(*)>1 order by rand()", Long.class)
+								.setParameter("clustering", clustering)
 								.setMaxResults( 1 )
 								.getSingleResult().longValue();
 				
@@ -88,7 +97,7 @@ public class ManualClusteringService
         if ( param.is_valid () )
         {
 			log.info (param.toString());
-			System.out.println (param.toString());
+			//~ System.out.println (param.toString());
 			
 			EntityManager em = Application.createEntityManager();
 			List <Long> removed_articles = param.getRemovedArticles ();
@@ -106,7 +115,7 @@ public class ManualClusteringService
 				cr.setArticleId ( article_id.longValue() );
 				cr.setNewsId ( news_id );
 
-				System.out.println ("adding to db line: "+cr.toString());
+				//~ System.out.println ("adding to db line: "+cr.toString());
 				
 				em.getTransaction().begin();
 				em.persist(cr);
