@@ -58,7 +58,7 @@ public class IncrementalClusteringTask extends Task {
 
         //~ //Configure match map generator
         //~ MatchMapGenerator matchMapGenerator = new MatchMapGenerator(matchMapConfiguration);
-        //Configure match map generator so thati it uses global tf idf vectors
+        //Configure match map generator so that it uses global tf idf vectors
         MatchMapGeneratorWithGlobalTfIdf matchMapGenerator = new MatchMapGeneratorWithGlobalTfIdf (matchMapConfiguration);
 
         //Prepare set with all articles from existing clusters

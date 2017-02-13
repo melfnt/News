@@ -1,3 +1,9 @@
+News ver 0.9.1
+ 
+  * Incremental clustering service: bugfix in date interpretation.
+ 
+-- Lucio Messina <luciomessina94@gmail.com> Mon, 13 Feb 2017 19:13 +0200
+
 News ver 0.9
  
   * Now ManualClusteringService is always performed against the news in the clustering with name "for_revision". That clustering name can be configured.

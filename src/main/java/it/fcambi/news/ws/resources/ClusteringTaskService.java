@@ -105,12 +105,14 @@ public class ClusteringTaskService extends TaskService<IncrementalClusteringTask
         if (newspapersToExclude.size() > 0) {
             select += " and a.source not in :newspapersToExclude";
         }
-
+		
+		System.out.println ("[DEBUG] (string) from "+fromString+" to "+toString);
+		
         Date from = null, to = null;
         if (fromString != null && toString != null) {
             SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss");
             try {
-                from = format.parse(fromString);
+                from = format.parse(fromString.replace());
                 to = format.parse(toString);
                 if (to.before(from))
                     throw new IllegalArgumentException("FROM date is after TO date.");
@@ -118,6 +120,8 @@ public class ClusteringTaskService extends TaskService<IncrementalClusteringTask
                 return Response.status(400).entity("Invalid FROM TO date: " + e.getMessage()).build();
             }
         }
+        
+        System.out.println ("[DEBUG] ( date ) from "+from+" to "+to);
 
         //Detect and add from to filters
         if (from != null && to != null && from.before(to))
