@@ -44,7 +44,7 @@ public class RemovedArticlesDTO
 	
 	public String toString ()
 	{
-		return annotator_name+" removed "+removed_articles.toString ()+" from cluster with id "+cluster_id;
+		return annotator_name+" removed "+removed_articles.toString ()+" from news with id "+cluster_id;
 	}
 	
 	public boolean is_valid ()

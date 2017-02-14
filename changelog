@@ -1,3 +1,9 @@
+News ver 0.10.2
+ 
+  * Manual Clustering: If an exception occurs, the message is sent to the client to improve debug.
+ 
+-- Lucio Messina <luciomessina94@gmail.com> Tue, 14 Feb 2017 20:01 +0200
+
 News ver 0.10.1
  
   * Manual Clustering: now the webapp shows the article's date to help the annotator's work.

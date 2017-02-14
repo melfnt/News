@@ -51,8 +51,8 @@ public class ManualClusteringService
 		{
 			System.err.println (e);
 			e.printStackTrace ();
+			return Response.status(400).entity(e.getMessage()).build();
 		}
-		return null;
     }
     
     private static synchronized ClusterDTO getRandomCluster () throws Exception
@@ -110,7 +110,6 @@ public class ManualClusteringService
         if ( param.is_valid () )
         {
 			log.info (param.toString());
-			//~ System.out.println (param.toString());
 			
 			EntityManager em = Application.createEntityManager();
 			List <Long> removed_articles = param.getRemovedArticles ();
@@ -127,8 +126,6 @@ public class ManualClusteringService
 				cr.setAnnotatorName ( annotator_name );
 				cr.setArticleId ( article_id.longValue() );
 				cr.setNewsId ( news_id );
-
-				//~ System.out.println ("adding to db line: "+cr.toString());
 				
 				em.getTransaction().begin();
 				em.persist(cr);
