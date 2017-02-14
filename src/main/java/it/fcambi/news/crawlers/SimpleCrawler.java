@@ -14,6 +14,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import it.fcambi.news.Logging;
@@ -91,8 +92,10 @@ public class SimpleCrawler implements Crawler
 		
 		URL_PATTERN = Pattern.compile(article_url_regex);
 		
+		logger.info ("order in which the paths are evaluated:");
 		for ( String path : paths_to_link )
 		{
+			logger.info (" --> "+path);
 			el.addAll ( d.select ( path ) );
 		}
 		
@@ -101,9 +104,10 @@ public class SimpleCrawler implements Crawler
 	
 	private List <String> get_href ( Elements links )
 	{
-		Set <String> urls = new HashSet <String> ();
+		Set <String> urls = new LinkedHashSet <String> ();
 
 		String url;
+		logger.info ("getting href...");
         for ( Element e: links ) 
         {
             url = e.attr("href");
@@ -114,11 +118,17 @@ public class SimpleCrawler implements Crawler
 				url = homepage_url+"/"+url.substring (1);
             if ( url.startsWith ("/") )
 				url = homepage_url+url.substring (1);
+            
             if (isArticleAtUrlParsable(url))
+            {
+				logger.info (" --> "+url);
                 urls.add(url);
+			}
         }
         
-		return new LinkedList <String> (urls);
+        logger.info ("returning "+new LinkedList (urls).toString());
+        
+		return new LinkedList (urls);
 	}
 	
 	private List <String> get_text ( Elements links )

@@ -25,6 +25,8 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+// DEBUG
+import java.util.Scanner;
 import it.fcambi.news.crawlers.*;
 
 /**
@@ -263,8 +265,8 @@ public class Application {
                 props.getProp("BIND_URI")+"/gui/app/\n");
         System.out.println("Press CTRL+C to stop...");
 		
-		//~ SimpleCrawler crw = new IlSecoloXIXCrawler ();
-		//~ crw.test ();
+		new IlSecoloXIXCrawler ().test();
+		new Scanner (System.in).next();
 		
         try {
             Thread.currentThread().join();

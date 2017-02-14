@@ -19,8 +19,8 @@ public class IlPostCrawler extends SimpleCrawler
 		add_xpath_target ( "description", "h2.tit2", "" );
 		add_xpath_target ( "body", "#singleBody", "" );
 		
-		add_article_link_in_homepage_target ( "#content .lanci a" );
 		add_article_link_in_homepage_target ( "#content article a" );
+		add_article_link_in_homepage_target ( "#content .lanci a" );
 		
 	}
 	

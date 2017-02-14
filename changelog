@@ -1,3 +1,9 @@
+News ver 0.11
+ 
+  * Articles Download Task: Fixed order in which articles are downloaded.
+ 
+-- Lucio Messina <luciomessina94@gmail.com> Wed, 15 Feb 2017 00:00 +0200
+
 News ver 0.10.2
  
   * Manual Clustering: If an exception occurs, the message is sent to the client to improve debug.

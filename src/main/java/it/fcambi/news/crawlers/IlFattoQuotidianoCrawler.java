@@ -22,8 +22,8 @@ public class IlFattoQuotidianoCrawler extends SimpleCrawler
 		add_xpath_target ( "body", ".article-body", ".inner-pagination" );
 		
 		add_article_link_in_homepage_target ( ".primo-piano a" );
-		add_article_link_in_homepage_target ( ".right-column a" );
 		add_article_link_in_homepage_target ( ".left-column a" );
+		add_article_link_in_homepage_target ( ".right-column a" );
 		
 		
 	}

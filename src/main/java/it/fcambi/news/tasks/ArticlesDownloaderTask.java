@@ -52,7 +52,7 @@ public class ArticlesDownloaderTask extends Task {
 		crawlers.add ( new IlFattoQuotidianoCrawler () );
 		crawlers.add ( new IlSecoloXIXCrawler () );
 		crawlers.add ( new IlPostCrawler () );
-
+		
         List<FrontPage> frontPages = new LinkedList<>();
         for (Crawler crawler : crawlers) {
             try {
