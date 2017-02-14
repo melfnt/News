@@ -92,10 +92,10 @@ public class SimpleCrawler implements Crawler
 		
 		URL_PATTERN = Pattern.compile(article_url_regex);
 		
-		logger.info ("order in which the paths are evaluated:");
+		//~ logger.info ("order in which the paths are evaluated:");
 		for ( String path : paths_to_link )
 		{
-			logger.info (" --> "+path);
+			//~ logger.info (" --> "+path);
 			el.addAll ( d.select ( path ) );
 		}
 		
@@ -107,7 +107,7 @@ public class SimpleCrawler implements Crawler
 		Set <String> urls = new LinkedHashSet <String> ();
 
 		String url;
-		logger.info ("getting href...");
+		//~ logger.info ("getting href...");
         for ( Element e: links ) 
         {
             url = e.attr("href");
@@ -121,12 +121,12 @@ public class SimpleCrawler implements Crawler
             
             if (isArticleAtUrlParsable(url))
             {
-				logger.info (" --> "+url);
+				//~ logger.info (" --> "+url);
                 urls.add(url);
 			}
         }
         
-        logger.info ("returning "+new LinkedList (urls).toString());
+        //~ logger.info ("returning "+new LinkedList (urls).toString());
         
 		return new LinkedList (urls);
 	}

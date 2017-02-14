@@ -265,8 +265,8 @@ public class Application {
                 props.getProp("BIND_URI")+"/gui/app/\n");
         System.out.println("Press CTRL+C to stop...");
 		
-		new IlSecoloXIXCrawler ().test();
-		new Scanner (System.in).next();
+		//~ new IlSecoloXIXCrawler ().test();
+		//~ new Scanner (System.in).next();
 		
         try {
             Thread.currentThread().join();
