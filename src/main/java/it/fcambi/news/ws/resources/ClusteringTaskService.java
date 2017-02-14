@@ -112,7 +112,7 @@ public class ClusteringTaskService extends TaskService<IncrementalClusteringTask
         if (fromString != null && toString != null) {
             SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss");
             try {
-                from = format.parse(fromString.replace());
+                from = format.parse(fromString);
                 to = format.parse(toString);
                 if (to.before(from))
                     throw new IllegalArgumentException("FROM date is after TO date.");

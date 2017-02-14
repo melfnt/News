@@ -5,6 +5,7 @@ import it.fcambi.news.Logging;
 import it.fcambi.news.model.Article;
 import it.fcambi.news.model.Clustering;
 import it.fcambi.news.model.ClusteringRevision;
+import it.fcambi.news.model.SelectedNewsForManualCluster;
 import it.fcambi.news.ws.resources.dto.RemovedArticlesDTO;
 import it.fcambi.news.ws.resources.dto.ClusterDTO;
 import it.fcambi.news.ws.resources.dto.ArticleDTO;
@@ -21,7 +22,6 @@ import javax.persistence.TypedQuery;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import java.util.logging.Logger;
-import java.util.Random;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,10 +29,9 @@ import java.util.stream.Collectors;
 public class ManualClusteringService
 {
 	
-	private final String _FOR_REVISION_CLUSTERING_NAME = "for_revision";
-	private final int _NUMBER_OF_ARTICLES_TO_BE_SHOWN = 100;
-	private final Logger log = Logging.registerLogger("it.fcambi.news.ManualClustering");
-	private final Random random_generator = new Random ();
+	private final static String _FOR_REVISION_CLUSTERING_NAME = "for_revision";
+	private final static int _NUMBER_OF_ARTICLES_TO_BE_SHOWN = 100;
+	private final static Logger log = Logging.registerLogger("it.fcambi.news.ManualClustering");
 	
 	@POST
     @Produces(MediaType.APPLICATION_JSON)
@@ -40,7 +39,7 @@ public class ManualClusteringService
 	{
         try
         {
-			log.info("Anonymus user wants to perform a manual clustering");
+			log.info("serving new request...");
 			
 			ClusterDTO cluster = getRandomCluster ();
 			
@@ -56,7 +55,7 @@ public class ManualClusteringService
 		return null;
     }
     
-    private ClusterDTO getRandomCluster () throws Exception
+    private static synchronized ClusterDTO getRandomCluster () throws Exception
     {
 		
 		EntityManager em = Application.createEntityManager();
@@ -67,11 +66,25 @@ public class ManualClusteringService
 			throw new IllegalArgumentException("Cannot find for_revision clustering");
         }
         
-		long selected_cluster = em.createQuery("select n.id from News n join n.articles k where n.clustering=:clustering group by n.id having count(*)>1 order by rand()", Long.class)
+        long last_selected_cluster = em.createQuery("select max(id) from SelectedNewsForManualCluster", Long.class)
+									.getSingleResult().longValue();
+
+        log.info ("last selected news: "+last_selected_cluster);
+        
+		long selected_cluster = em.createQuery("select n.id from News n join n.articles k where n.clustering=:clustering and n.id>:last group by n.id having count(*)>1", Long.class)
 								.setParameter("clustering", clustering)
-								.setMaxResults( 1 )
-								.getSingleResult().longValue();
+								.setParameter("last", last_selected_cluster)
+								.getResultList().stream().min ( Long::compare ).get().longValue();
+		
+		em.getTransaction().begin();
+		em.createQuery("update SelectedNewsForManualCluster set id = :new where id=:old" )
+						.setParameter ("old", last_selected_cluster)
+						.setParameter ("new", selected_cluster)
+						.executeUpdate ();
+		em.getTransaction().commit();		
 				
+		log.info ("selected news: "+selected_cluster);
+
 		TypedQuery<Article> select = em.createQuery("select a from News n join n.articles a where n.id=:newsId order by rand()", Article.class)
 									 .setParameter("newsId", selected_cluster)
 									 .setMaxResults( _NUMBER_OF_ARTICLES_TO_BE_SHOWN );
