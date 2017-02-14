@@ -1,3 +1,9 @@
+News ver 0.10.1
+ 
+  * Manual Clustering: now the webapp shows the article's date to help the annotator's work.
+ 
+-- Lucio Messina <luciomessina94@gmail.com> Tue, 14 Feb 2017 19:37 +0200
+
 News ver 0.10
  
   * Manual Clustering: now the news in cluster "for_revision" are taken sequentially.
