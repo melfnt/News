@@ -32,6 +32,7 @@ public class CardinalityDebugger
 			
 			fw.write ( name+"\n\n" );
 			fw.write ( "number of instances: "+num_instances.toString() +"\n");
+			fw.write ( "total size: "+total_size.toString() +"\n");
 			fw.write ( "avg value: "+(total_size.divide(num_instances)).toString() +"\n");
 			
 			fw.close ();
