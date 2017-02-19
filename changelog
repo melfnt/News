@@ -1,3 +1,9 @@
+News ver 0.12
+ 
+  * Added a module to debug cardinality of union and intersection of the articles' keyword
+ 
+-- Lucio Messina <luciomessina94@gmail.com> Sun, 19 Feb 2017 11:56 +0200
+
 News ver 0.11
  
   * Articles Download Task: Fixed order in which articles are downloaded.

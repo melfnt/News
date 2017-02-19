@@ -85,7 +85,7 @@ public class ManualClusteringService
 				
 		log.info ("selected news: "+selected_cluster);
 
-		TypedQuery<Article> select = em.createQuery("select a from News n join n.articles a where n.id=:newsId order by rand()", Article.class)
+		TypedQuery<Article> select = em.createQuery("select a from News n join n.articles a where n.id=:newsId", Article.class)
 									 .setParameter("newsId", selected_cluster)
 									 .setMaxResults( _NUMBER_OF_ARTICLES_TO_BE_SHOWN );
 		

@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 //DEBUG
+import it.fcambi.news.debug.CardinalityDebugger;
 import it.fcambi.news.debug.TfIdfDebugger;
 import java.util.Scanner;
 
@@ -29,6 +30,10 @@ public class MatchMapGeneratorWithGlobalTfIdf extends MatchMapGenerator
     protected Map<Long, GlobalTFIDFWordVector> vector_cache = new ConcurrentHashMap <Long, GlobalTFIDFWordVector> ();
     protected TFDictionary dictionary;
     
+    private CardinalityDebugger union_debugger = new CardinalityDebugger ("UNION");
+    private CardinalityDebugger intersection_debugger = new CardinalityDebugger ("INTERSECTION");
+    private CardinalityDebugger body_length_debugger = new CardinalityDebugger ("BODY_LENGTH");
+    
     public MatchMapGeneratorWithGlobalTfIdf ( MatchMapGeneratorConfiguration config ) 
     {
 		super (config);
@@ -37,6 +42,17 @@ public class MatchMapGeneratorWithGlobalTfIdf extends MatchMapGenerator
 		this.dictionary = (  ( TFIDFWordVectorFactory ) config.getWordVectorFactory()  ).get_dictionary ();
 		
     }
+    
+    public MatchMapGeneratorWithGlobalTfIdf ( MatchMapGeneratorConfiguration config, CardinalityDebugger union_debugger, CardinalityDebugger intersection_debugger, CardinalityDebugger body_length_debugger ) 
+    {
+		
+		this (config);
+		this.union_debugger = union_debugger;
+		this.intersection_debugger = intersection_debugger;
+		this.body_length_debugger = body_length_debugger;
+		
+    }
+    
     
     public void process_articles_and_add_to_cache ( Collection<Article> articles )
     {
@@ -55,7 +71,8 @@ public class MatchMapGeneratorWithGlobalTfIdf extends MatchMapGenerator
 			
 			//DEBUG
 			//~ tf_idf_debugger.conditional_debug ( article, w );
-    
+			body_length_debugger.add_instance ( config.getKeywordSelectionFn().apply (title, description, body).words().size() );
+			
         });
 	}
 
@@ -85,6 +102,12 @@ public class MatchMapGeneratorWithGlobalTfIdf extends MatchMapGenerator
                 GlobalTFIDFWordVector v = this.vector_cache.get(match.getId());				
                 Set <String> intersection = new HashSet<String>( v.getWords () );
                 intersection.retainAll ( words_in_w );
+                
+                // DEBUG
+                intersection_debugger.add_instance ( intersection.size() );
+                Set <String> union = new HashSet<String>( v.getWords () );
+                union.addAll ( words_in_w );
+                union_debugger.add_instance ( union.size () );
                 
                 MatchingArticle a = new MatchingArticle();
                 a.setArticle(match);

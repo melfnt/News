@@ -106,7 +106,6 @@ public class ClusteringTaskService extends TaskService<IncrementalClusteringTask
             select += " and a.source not in :newspapersToExclude";
         }
 		
-		System.out.println ("[DEBUG] (string) from "+fromString+" to "+toString);
 		
         Date from = null, to = null;
         if (fromString != null && toString != null) {
@@ -121,8 +120,7 @@ public class ClusteringTaskService extends TaskService<IncrementalClusteringTask
             }
         }
         
-        System.out.println ("[DEBUG] ( date ) from "+from+" to "+to);
-
+        
         //Detect and add from to filters
         if (from != null && to != null && from.before(to))
             select += " and a.created between :from and :to";
