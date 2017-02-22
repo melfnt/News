@@ -59,14 +59,15 @@ public class IncrementalClusteringTask extends Task {
         articlesToBeClustered = articlesToBeClustered.stream().map(em::merge).collect(Collectors.toList());
 
 		//DEBUG
-		CardinalityDebugger union_debugger = new CardinalityDebugger ( "UNION" );
-		CardinalityDebugger intersection_debugger = new CardinalityDebugger ( "INTERSECTION" );
-		CardinalityDebugger body_length_debugger = new CardinalityDebugger ( "BODY_LENGTH" );
+		//~ CardinalityDebugger union_debugger = new CardinalityDebugger ( "UNION" );
+		//~ CardinalityDebugger intersection_debugger = new CardinalityDebugger ( "INTERSECTION" );
+		//~ CardinalityDebugger body_length_debugger = new CardinalityDebugger ( "BODY_LENGTH" );
 		
         //~ //Configure match map generator
         //~ MatchMapGenerator matchMapGenerator = new MatchMapGenerator(matchMapConfiguration);
         //Configure match map generator so that it uses global tf idf vectors
-        MatchMapGeneratorWithGlobalTfIdf matchMapGenerator = new MatchMapGeneratorWithGlobalTfIdf ( matchMapConfiguration, union_debugger, intersection_debugger, body_length_debugger );
+        MatchMapGeneratorWithGlobalTfIdf matchMapGenerator = new MatchMapGeneratorWithGlobalTfIdf ( matchMapConfiguration );
+        //~ MatchMapGeneratorWithGlobalTfIdf matchMapGenerator = new MatchMapGeneratorWithGlobalTfIdf ( matchMapConfiguration, union_debugger, intersection_debugger, body_length_debugger );
 
         //Prepare set with all articles from existing clusters
         String select = "select a from Article a where key(a.news)=:clusteringName";
@@ -127,10 +128,10 @@ public class IncrementalClusteringTask extends Task {
 
         }
 		
-		// DEBUG
-		union_debugger.print_report ();
-		intersection_debugger.print_report ();
-		body_length_debugger.print_report ();
+		//~ // DEBUG
+		//~ union_debugger.print_report ();
+		//~ intersection_debugger.print_report ();
+		//~ body_length_debugger.print_report ();
 
         if (!Thread.currentThread().isInterrupted()) {
             em.getTransaction().commit();

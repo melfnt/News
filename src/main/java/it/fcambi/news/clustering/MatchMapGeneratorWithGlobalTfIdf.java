@@ -71,7 +71,7 @@ public class MatchMapGeneratorWithGlobalTfIdf extends MatchMapGenerator
 			
 			//DEBUG
 			//~ tf_idf_debugger.conditional_debug ( article, w );
-			body_length_debugger.add_instance ( config.getKeywordSelectionFn().apply (title, description, body).words().size() );
+			//~ body_length_debugger.add_instance ( config.getKeywordSelectionFn().apply (title, description, body).words().size() );
 			
         });
 	}
@@ -104,10 +104,10 @@ public class MatchMapGeneratorWithGlobalTfIdf extends MatchMapGenerator
                 intersection.retainAll ( words_in_w );
                 
                 // DEBUG
-                intersection_debugger.add_instance ( intersection.size() );
-                Set <String> union = new HashSet<String>( v.getWords () );
-                union.addAll ( words_in_w );
-                union_debugger.add_instance ( union.size () );
+                //~ intersection_debugger.add_instance ( intersection.size() );
+                //~ Set <String> union = new HashSet<String>( v.getWords () );
+                //~ union.addAll ( words_in_w );
+                //~ union_debugger.add_instance ( union.size () );
                 
                 MatchingArticle a = new MatchingArticle();
                 a.setArticle(match);

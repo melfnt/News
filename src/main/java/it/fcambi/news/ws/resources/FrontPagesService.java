@@ -278,7 +278,7 @@ public class FrontPagesService {
 
         List<FrontPage> pages = pagesQuery.getResultList();
 
-		//~ System.out.println ("pages: "+pages.toString());
+		System.out.println (pages.size()+" pages: "+pages.toString());
 		
         if (pages.size() == 0) {
             return Response.status(400).entity("\"Empty dataset\"").build();
@@ -289,7 +289,7 @@ public class FrontPagesService {
         FrontPagesClustering fpc = new FrontPagesClustering();
         List<FrontPagesTimestampGroup> all_groups = fpc.groupFrontPagesByTimestamp(pages);
 
-		//~ System.out.println ("groups: "+groups.toString());
+		System.out.println ("before: "+all_groups.size()+" groups: "+all_groups.toString());
 		
 		//TODO change this: let the user choose which Newspaper to show
 		Set <Newspaper> newspaper_set = new HashSet<Newspaper> ( Arrays.asList ( 
@@ -312,13 +312,14 @@ public class FrontPagesService {
 
         List<NewspapersDistance> distancesByTimestamp = new Vector<>();
 		
+		System.out.println ("after: "+groups.size()+" groups: "+groups.toString());
 		
         //Generates distances matrix between newspapers for each time range
         groups.stream().forEachOrdered(group -> {
 
-            //~ System.out.println ("group with timestamp: "+group.getTimestamp().getTime());
-            //~ System.out.println ("  has "+group.getFrontPages().size()+" frontpages");
-            //~ group.getFrontPages().stream().forEach( f -> System.out.println ("  "+f.getId()) );
+            System.out.println ("group with timestamp: "+group.getTimestamp().getTime());
+            System.out.println ("  has "+group.getFrontPages().size()+" frontpages");
+            group.getFrontPages().stream().forEach( f -> System.out.println ("  "+f.getId()) );
             
             group.getFrontPages().sort((a, b) -> a.getNewspaper().compareTo(b.getNewspaper()));
 
@@ -404,7 +405,7 @@ public class FrontPagesService {
 
         });
 		
-		//~ System.out.println ( "points by time:" + pointsByTime.toString() );
+		System.out.println ( "points by time:" + pointsByTime.toString() );
 		
         return Response.status(200).entity(pointsByTime).build();
 
