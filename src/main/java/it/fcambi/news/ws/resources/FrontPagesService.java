@@ -278,7 +278,8 @@ public class FrontPagesService {
 
         List<FrontPage> pages = pagesQuery.getResultList();
 
-		System.out.println (pages.size()+" pages: "+pages.toString());
+		System.out.println (pages.size()+" pages: ");
+		pages.stream().forEach ( p -> System.out.println (p.getTimestamp().getTime()+" "+p.getNewspaper()) );
 		
         if (pages.size() == 0) {
             return Response.status(400).entity("\"Empty dataset\"").build();
