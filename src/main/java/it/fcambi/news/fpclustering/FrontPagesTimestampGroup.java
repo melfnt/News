@@ -45,4 +45,10 @@ public class FrontPagesTimestampGroup {
     public FrontPage getFrontPage(int i) {
         return this.frontPages.get(i);
     }
+    
+    public String toString ()
+    {
+		return timestamp.getTime() + "[" + frontPages.stream().map ( f -> f.getNewspaper() + " ").reduce("", String::concat) + "]";
+	}
+    
 }
