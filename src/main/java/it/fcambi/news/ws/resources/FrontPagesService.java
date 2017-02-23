@@ -270,7 +270,7 @@ public class FrontPagesService {
             query += " and p.timestamp <= :tots";
         query += " order by p.timestamp";
 
-        TypedQuery<FrontPage> pagesQuery = em.createQuery(query, FrontPage.class) ;
+        TypedQuery<FrontPage> pagesQuery = em.createQuery(query, FrontPage.class)
                 .setParameter("clustering", clustering.getName());
         if (from != null)
             pagesQuery.setParameter("fromts", new Calendar.Builder().setInstant(from).build());
