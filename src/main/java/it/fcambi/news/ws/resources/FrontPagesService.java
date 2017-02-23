@@ -262,15 +262,16 @@ public class FrontPagesService {
         }
 
         String query = "select p from FrontPage p where p.articles.size > 0 " +
-                "and (select count(a) from p.articles a where key(a.news) = :clustering) = p.articles.size";
+                //~ "and (select count(a) from p.articles a where key(a.news) = :clustering) = p.articles.size";
+                "";
         if (from != null)
             query += " and p.timestamp >= :fromts";
         if (to != null)
             query += " and p.timestamp <= :tots";
         query += " order by p.timestamp";
 
-        TypedQuery<FrontPage> pagesQuery = em.createQuery(query, FrontPage.class)
-                .setParameter("clustering", clustering.getName());
+        TypedQuery<FrontPage> pagesQuery = em.createQuery(query, FrontPage.class) ;
+                //~ .setParameter("clustering", clustering.getName());
         if (from != null)
             pagesQuery.setParameter("fromts", new Calendar.Builder().setInstant(from).build());
         if (to != null)
