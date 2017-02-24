@@ -97,10 +97,10 @@ public class ClusteringPerformanceTask extends Task
 
         List<News> testNews = generateClustering(testSet, news, test);
 
-        MatchMapGenerator generator = new MatchMapGenerator(conf);
-        //~ MatchMapGeneratorWithGlobalTfIdf generator = new MatchMapGeneratorWithGlobalTfIdf(conf);
-		//~ generator.process_articles_and_add_to_cache ( trainingSet );
-		//~ generator.process_articles_and_add_to_cache ( testSet );
+        //~ MatchMapGenerator generator = new MatchMapGenerator(conf);
+        MatchMapGeneratorWithGlobalTfIdf generator = new MatchMapGeneratorWithGlobalTfIdf(conf);
+		generator.process_articles_and_add_to_cache ( trainingSet );
+		generator.process_articles_and_add_to_cache ( testSet );
 		
 		
         double progressIncrement = 0.98/(trainingSet.size()+testSet.size());
