@@ -1,3 +1,9 @@
+News ver 0.13.1
+ 
+  * Starting models test with the new testset: non global tfidf 
+ 
+-- Lucio Messina <luciomessina94@gmail.com> Fri, 24 Feb 2017 17:04 +0200
+
 News ver 0.13
  
   * Starting models test with the new testset: global tfidf 

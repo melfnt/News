@@ -63,10 +63,10 @@ public class IncrementalClusteringTask extends Task {
 		//~ CardinalityDebugger intersection_debugger = new CardinalityDebugger ( "INTERSECTION" );
 		//~ CardinalityDebugger body_length_debugger = new CardinalityDebugger ( "BODY_LENGTH" );
 		
-        //~ //Configure match map generator
-        //~ MatchMapGenerator matchMapGenerator = new MatchMapGenerator(matchMapConfiguration);
-        //Configure match map generator so that it uses global tf idf vectors
-        MatchMapGeneratorWithGlobalTfIdf matchMapGenerator = new MatchMapGeneratorWithGlobalTfIdf ( matchMapConfiguration );
+        //Configure match map generator
+        MatchMapGenerator matchMapGenerator = new MatchMapGenerator(matchMapConfiguration);
+        //~ //Configure match map generator so that it uses global tf idf vectors
+        //~ MatchMapGeneratorWithGlobalTfIdf matchMapGenerator = new MatchMapGeneratorWithGlobalTfIdf ( matchMapConfiguration );
         //~ MatchMapGeneratorWithGlobalTfIdf matchMapGenerator = new MatchMapGeneratorWithGlobalTfIdf ( matchMapConfiguration, union_debugger, intersection_debugger, body_length_debugger );
 
         //Prepare set with all articles from existing clusters
@@ -90,9 +90,9 @@ public class IncrementalClusteringTask extends Task {
 
         Set<News> newsToMerge = new HashSet<>();
 
-		// FOR GLOBALTFIDF ONLY
-        matchMapGenerator.process_articles_and_add_to_cache ( articlesToBeClustered );
-        matchMapGenerator.process_articles_and_add_to_cache ( classifiedArticles );
+		//~ // FOR GLOBALTFIDF ONLY
+        //~ matchMapGenerator.process_articles_and_add_to_cache ( articlesToBeClustered );
+        //~ matchMapGenerator.process_articles_and_add_to_cache ( classifiedArticles );
         
         
         //Find a fitting cluster for each article one by one
