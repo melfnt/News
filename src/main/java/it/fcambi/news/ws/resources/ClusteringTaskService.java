@@ -148,10 +148,10 @@ public class ClusteringTaskService extends TaskService<IncrementalClusteringTask
             return Response.status(400).entity("Empty article dataset.").build();
         }
 
-        //~ IncrementalClusteringTask task = new IncrementalClusteringTask(
-                //~ parser.getConfig(), matcher, articlesToBeClustered, clustering);
-        IncrementalClusteringTask task = new CustomClusteringTask(
+        IncrementalClusteringTask task = new IncrementalClusteringTask(
                 parser.getConfig(), matcher, articlesToBeClustered, clustering);
+        //~ IncrementalClusteringTask task = new CustomClusteringTask(
+                //~ parser.getConfig(), matcher, articlesToBeClustered, clustering);
        
         int id = super.executeTask(task);
 

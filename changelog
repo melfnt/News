@@ -1,3 +1,9 @@
+News ver 0.13
+ 
+  * Starting models test with the new testset: global tfidf 
+ 
+-- Lucio Messina <luciomessina94@gmail.com> Fri, 24 Feb 2017 16:38 +0200
+
 News ver 0.12.3
  
   * CustomCLusteringTask: added custom clusteing task, that allows to cluster arbitrary articles
