@@ -23,7 +23,7 @@ public class IncrementalClusteringTask extends Task {
 
     private MatchMapGeneratorConfiguration matchMapConfiguration;
     private Matcher matcher;
-    private List<Article> articlesToBeClustered;
+    protected List<Article> articlesToBeClustered;
     private Clustering clustering;
 	
     public IncrementalClusteringTask(MatchMapGeneratorConfiguration matchMapConfiguration, Matcher matcher,

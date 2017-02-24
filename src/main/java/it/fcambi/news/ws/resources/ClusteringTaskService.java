@@ -8,6 +8,7 @@ import it.fcambi.news.model.Article;
 import it.fcambi.news.model.Clustering;
 import it.fcambi.news.model.Newspaper;
 import it.fcambi.news.tasks.IncrementalClusteringTask;
+import it.fcambi.news.tasks.CustomClusteringTask;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Singleton;
@@ -147,7 +148,9 @@ public class ClusteringTaskService extends TaskService<IncrementalClusteringTask
             return Response.status(400).entity("Empty article dataset.").build();
         }
 
-        IncrementalClusteringTask task = new IncrementalClusteringTask(
+        //~ IncrementalClusteringTask task = new IncrementalClusteringTask(
+                //~ parser.getConfig(), matcher, articlesToBeClustered, clustering);
+        IncrementalClusteringTask task = new CustomClusteringTask(
                 parser.getConfig(), matcher, articlesToBeClustered, clustering);
        
         int id = super.executeTask(task);

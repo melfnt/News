@@ -1,3 +1,9 @@
+News ver 0.12.3
+ 
+  * CustomCLusteringTask: added custom clusteing task, that allows to cluster arbitrary articles
+ 
+-- Lucio Messina <luciomessina94@gmail.com> Fri, 24 Feb 2017 10:46 +0200
+
 News ver 0.12.2
  
   * Added debug option for frontpage distances
