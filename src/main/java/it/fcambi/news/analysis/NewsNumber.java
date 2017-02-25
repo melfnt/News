@@ -26,6 +26,8 @@ public class NewsNumber
 	
 	private static final String _DEBUG_DIRECTORY = "debug/";
 	private String clustering_name;
+	//~ private String date_from = "2017-02-15 00:00:00";
+	//~ private String date_to = "2017-02-22 00:00:00";
 	private String date_from = "2015-10-13 12:19:03";
 	private String date_to = "2017-02-22 12:43:31";
 	
@@ -71,6 +73,9 @@ public class NewsNumber
 			
 			Set <News> news = new HashSet <News> ();
 			Timestamp end = parse_date ( date_to );
+			
+			int total_articles = articles.size();
+			
 			for ( Timestamp current = parse_date ( date_from ); current.before (end); current = new Timestamp(current.getTime() + ( time_range * 60000L)) )
 			{
 				Iterator <Article> it = articles.iterator();
@@ -88,7 +93,7 @@ public class NewsNumber
 					}
 				}
 				
-				fw.write ( news.size()+"\n" );
+				fw.write ( (total_articles - articles.size() ) + "\t" +news.size()+"\n" );
 			}
 			
 			fw.close ();
