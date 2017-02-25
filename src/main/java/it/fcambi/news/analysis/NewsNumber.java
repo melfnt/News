@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.io.FileWriter;
 
 public class NewsNumber
 {
@@ -64,30 +65,39 @@ public class NewsNumber
 								.getResultList()
 								.stream().sorted ((a1, a2) -> a1.getCreated().compareTo(a2.getCreated())).collect(Collectors.toList());
 		
-		FileWriter fw = new FileWriter( _DEBUG_DIRECTORY + "number_of_news" );
-		
-		Set <News> news = new HashSet <News> ();
-		Timestamp end = parse_date ( date_to );
-		for ( Timestamp current = parse_date ( date_from ); current.before (end); current = new Timestamp(current.getTime() + ( time_range * 60000L)) )
+		try
 		{
-			Iterator <Article> it = articles.iterator();
-			while ( it.hasNext() )
+			FileWriter fw = new FileWriter( _DEBUG_DIRECTORY + "number_of_news" );
+			
+			Set <News> news = new HashSet <News> ();
+			Timestamp end = parse_date ( date_to );
+			for ( Timestamp current = parse_date ( date_from ); current.before (end); current = new Timestamp(current.getTime() + ( time_range * 60000L)) )
 			{
-				Article a = it.next();
-				if ( a.getCreated().before(current) )
+				Iterator <Article> it = articles.iterator();
+				while ( it.hasNext() )
 				{
-					news.add ( a.getNews ( clustering ) );
-					it.remove();
+					Article a = it.next();
+					if ( a.getCreated().before(current) )
+					{
+						news.add ( a.getNews ( clustering ) );
+						it.remove();
+					}
+					else
+					{
+						break;
+					}
 				}
-				else
-				{
-					break;
-				}
+				
+				fw.write ( news.size()+"\n" );
 			}
 			
-			fw.write ( news.size()+"\n" );
-			
+			fw.close ();
 		}
+		catch ( Exception e )
+		{
+			System.err.println (e);
+		}
+		
 		
 		
 	}
