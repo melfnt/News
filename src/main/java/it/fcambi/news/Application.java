@@ -28,6 +28,7 @@ import java.util.logging.Logger;
 // DEBUG
 import java.util.Scanner;
 import it.fcambi.news.crawlers.*;
+import it.fcambi.news.analysis.NewsNumber;
 
 /**
  * Created by Francesco on 29/09/15.
@@ -258,7 +259,10 @@ public class Application {
 
         configureArticleDownloaderTask();
         configureGoogleClustersImportTask();
-
+		
+		NewsNumber nn = new NewsNumber ( "for_distance" );
+		nn.do_analysis ( 120 );
+		
         log.info("Startup Completed - All OK");
 
         System.out.println("\nApplication Ready\n\t- Server @ "+props.getProp("BIND_URI")+"\n\t- GUI @ "+
