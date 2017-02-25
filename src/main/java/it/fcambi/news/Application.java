@@ -28,7 +28,8 @@ import java.util.logging.Logger;
 // DEBUG
 import java.util.Scanner;
 import it.fcambi.news.crawlers.*;
-import it.fcambi.news.analysis.NewsNumber;
+import it.fcambi.news.analysis.ClushAnalysis;
+//~ import it.fcambi.news.analysis.NewsNumber;
 
 /**
  * Created by Francesco on 29/09/15.
@@ -260,8 +261,10 @@ public class Application {
         configureArticleDownloaderTask();
         configureGoogleClustersImportTask();
 		
-		NewsNumber nn = new NewsNumber ( "test_time_performance_global_tfidf" );
-		nn.do_analysis ( 120 );
+		ClushAnalysis ca = new ClushAnalysis ( "for_distance" );
+		ca.do_analysis ( );
+		//~ NewsNumber nn = new NewsNumber ( "test_time_performance_global_tfidf" );
+		//~ nn.do_analysis ( 120 );
 		
         log.info("Startup Completed - All OK");
 

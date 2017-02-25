@@ -44,6 +44,7 @@ public class NewsNumber
 			return null;
 		}
 	}
+	
 	public NewsNumber ( String clustering_name )
 	{
 		this.clustering_name = clustering_name;
