@@ -260,7 +260,7 @@ public class Application {
         configureArticleDownloaderTask();
         configureGoogleClustersImportTask();
 		
-		NewsNumber nn = new NewsNumber ( "for_distance" );
+		NewsNumber nn = new NewsNumber ( "test_time_performance_global_tfidf" );
 		nn.do_analysis ( 120 );
 		
         log.info("Startup Completed - All OK");

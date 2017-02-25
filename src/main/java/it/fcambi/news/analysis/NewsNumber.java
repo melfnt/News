@@ -25,8 +25,8 @@ public class NewsNumber
 	
 	private static final String _DEBUG_DIRECTORY = "debug/";
 	private String clustering_name;
-	private String date_from = "2017-02-15 00:00";
-	private String date_to = "2017-02-22 00:00";
+	private String date_from = "2015-10-13 12:19:03";
+	private String date_to = "2017-02-22 12:43:31";
 	
 	private Timestamp parse_date ( String date_str )
 	{
